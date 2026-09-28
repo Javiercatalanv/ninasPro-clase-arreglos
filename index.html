@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clase 6: el ciclo while | Niñas PRO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#5270FF; --blue-strong:#3D5BF0; --pink:#FF5FBF; --pink-soft:#FFE4F4; --sky:#BDF6FF; --sun:#FFC94D;
+  --ink:#1A1D3F; --ink-2:#4B5180; --bg:#FFFFFF; --panel:#FDF0F8; --line:#D8DCFA;
+  --code-bg:#1D2142; --code-ink:#E9EBFF; --code-dim:#7B81B6;
+  --ok:#14995F; --bad:#D93A45;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --blue:#7D93FF; --blue-strong:#6680FF; --ink:#EEF0FF; --ink-2:#AEB3E0; --bg:#12142B; --panel:#1C1F3E; --line:#30356A;
+    --pink-soft:#3B1F3D; --code-bg:#0B0D22; --ok:#3DDC97; --bad:#FF6B75;
+  }
+}
+:root[data-theme="dark"]{
+  --blue:#7D93FF; --blue-strong:#6680FF; --ink:#EEF0FF; --ink-2:#AEB3E0; --bg:#12142B; --panel:#1C1F3E; --line:#30356A;
+  --pink-soft:#3B1F3D; --code-bg:#0B0D22; --ok:#3DDC97; --bad:#FF6B75;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*,*::before,*::after{box-sizing:inherit;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.55;}
+code,pre,textarea,.mono{font-family:"Space Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+p code,li code,label code,.note code,td code{background:var(--pink-soft);color:var(--ink);padding:1px 6px;border-radius:6px;font-size:.9em;}
+h2{font-size:clamp(24px,3vw,32px);line-height:1.15;letter-spacing:-.02em;margin:0 0 12px;}
+h3{font-size:20px;line-height:1.25;margin:0 0 8px;letter-spacing:-.01em;}
+p{max-width:68ch;margin:0 0 14px;}
+img{max-width:100%;}
+button{font:inherit;}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px;}
+
+/* ---------- Header ---------- */
+.top{background:var(--blue-strong);color:#fff;position:relative;overflow:hidden;}
+.top::after{content:"+ = v ^ + = v ^ + = v ^ + = v ^ + = v ^ + = v ^ + = v ^ + = v ^";position:absolute;right:-30px;top:-6px;width:330px;font-size:34px;font-weight:700;line-height:1.55;word-spacing:.9em;color:rgba(255,255,255,.2);pointer-events:none;}
+.top-inner{max-width:1120px;margin:0 auto;padding:28px 24px 20px;display:flex;align-items:center;gap:20px;position:relative;z-index:1;}
+.brand-mark{background:#fff;color:var(--blue-strong);font-weight:700;font-size:17px;line-height:1.02;padding:10px 12px;border-radius:14px;flex:none;letter-spacing:-.01em;}
+.brand-course{margin:0;font-size:15px;opacity:.85;}
+.top h1{margin:2px 0 0;font-size:clamp(28px,4.4vw,46px);line-height:1.05;letter-spacing:-.03em;}
+.tabs{max-width:1120px;margin:0 auto;padding:0 24px;display:flex;gap:4px;overflow-x:auto;position:relative;z-index:1;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{background:transparent;border:0;color:#fff;font-weight:600;font-size:16px;padding:12px 18px 14px;border-radius:14px 14px 0 0;cursor:pointer;white-space:nowrap;opacity:.88;}
+.tab:hover{opacity:1;background:rgba(255,255,255,.12);}
+.tab[aria-selected="true"]{background:var(--bg);color:var(--ink);opacity:1;}
+
+main{max-width:1120px;margin:0 auto;padding:36px 24px 80px;}
+.panel > .block + .block{margin-top:64px;}
+.lead{font-size:19px;color:var(--ink-2);}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:16px;padding:9px 18px;border-radius:999px;border:2px solid var(--blue);background:transparent;color:var(--blue);cursor:pointer;line-height:1.2;}
+.btn:hover:not(:disabled){background:var(--blue);color:#fff;}
+.btn.primary{background:var(--blue);color:#fff;}
+.btn.primary:hover:not(:disabled){background:var(--blue-strong);border-color:var(--blue-strong);}
+.btn.pink{border-color:var(--pink);color:var(--pink);}
+.btn.pink:hover:not(:disabled){background:var(--pink);color:#fff;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn.small{font-size:14px;padding:6px 13px;}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+
+/* ---------- Code ---------- */
+.code-block{background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:14px 0;font-size:15px;line-height:1.7;overflow-x:auto;margin:0;}
+.code-block .ln{display:flex;padding:0 18px 0 12px;white-space:pre;transition:background .15s;}
+.lnum{width:2.4ch;color:var(--code-dim);margin-right:14px;text-align:right;flex:none;user-select:none;}
+.ln.cur{background:rgba(255,201,77,.2);box-shadow:inset 4px 0 0 var(--sun);}
+.ln.no{background:rgba(255,95,191,.2);box-shadow:inset 4px 0 0 var(--pink);}
+.ln.err{background:rgba(255,80,90,.3);box-shadow:inset 4px 0 0 #FF5A64;}
+.t-kw{color:#FF8ED3;} .t-io{color:#8FE6FF;} .t-str{color:#FFD98C;} .t-num{color:#BCA9FF;} .t-com{color:var(--code-dim);font-style:italic;} .t-pre{color:#FF8ED3;}
+.console{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:12px 14px;min-height:62px;white-space:pre-wrap;word-break:break-word;font-family:"Space Mono",ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.6;margin:0;}
+.console .echo{color:var(--sun);}
+.console .muted{color:var(--code-dim);}
+.console .errtxt{color:#FF8A92;}
+.label{font-weight:600;font-size:15px;color:var(--ink-2);margin:0 0 6px;display:block;}
+
+/* ---------- Hero: alarm ---------- */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:center;background:var(--panel);border-radius:28px;padding:36px;}
+.hero h2{font-size:clamp(28px,4vw,44px);letter-spacing:-.03em;}
+.alarm-stage{display:grid;gap:12px;}
+.clock-row{display:flex;align-items:center;gap:18px;}
+.clock{font-size:76px;line-height:1;display:inline-block;transform-origin:50% 60%;}
+.clock.ring{animation:ring .55s ease-in-out;}
+@keyframes ring{0%{transform:rotate(0)}15%{transform:rotate(-16deg)}35%{transform:rotate(15deg)}55%{transform:rotate(-11deg)}75%{transform:rotate(8deg)}100%{transform:rotate(0)}}
+.ring-text{font-weight:700;font-size:22px;color:var(--pink);min-height:1.4em;}
+.vars-inline{display:flex;gap:10px;flex-wrap:wrap;}
+.chip-var{font-family:"Space Mono",monospace;font-size:15px;background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:4px 10px;}
+.chip-var b{color:var(--blue);}
+.chip-var.flash{border-color:var(--pink);}
+.note{font-size:16px;color:var(--ink-2);background:var(--bg);border-left:4px solid var(--pink);padding:8px 12px;border-radius:0 10px 10px 0;margin:0;min-height:2.6em;}
+
+/* ---------- Flow ---------- */
+.flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-top:18px;}
+.flow-svg{width:100%;height:auto;background:var(--panel);border-radius:22px;padding:10px;}
+.fnode rect,.fnode polygon{fill:var(--bg);stroke:var(--line);stroke-width:2.5;transition:fill .2s,stroke .2s;}
+.fnode text{fill:var(--ink);font-family:"Space Mono",monospace;font-size:14px;}
+.fnode.active rect,.fnode.active polygon{fill:var(--pink-soft);stroke:var(--pink);stroke-width:3.5;}
+.fnode.warn polygon{stroke:var(--bad);}
+.fedge{fill:none;stroke:var(--ink-2);stroke-width:2;opacity:.55;transition:stroke .2s,opacity .2s;}
+.fedge.active{stroke:var(--pink);stroke-width:3.5;opacity:1;}
+.flabel{fill:var(--ink-2);font-size:14px;font-weight:600;font-family:"Space Grotesk",sans-serif;}
+.flow-side{display:grid;gap:12px;}
+.controls-row{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;}
+.controls-row label{display:flex;align-items:center;gap:8px;font-size:15px;}
+input[type=number]{width:4.2em;font:inherit;padding:5px 8px;border-radius:8px;border:2px solid var(--line);background:var(--bg);color:var(--ink);}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--pink);}
+.step-count{font-size:14px;color:var(--ink-2);}
+
+/* ---------- Versus ---------- */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.pt{border-radius:5px;padding:1px 3px;}
+.pt.init{background:rgba(125,147,255,.38);}
+.pt.cond{background:rgba(255,95,191,.38);}
+.pt.upd{background:rgba(255,201,77,.34);}
+.pt.new{outline:2px solid #fff;outline-offset:1px;}
+.slot{display:inline-block;min-width:5ch;border-bottom:2px dashed var(--code-dim);}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 0;padding:0;list-style:none;font-size:15px;}
+.legend li{display:flex;align-items:center;gap:6px;}
+.sw{width:14px;height:14px;border-radius:4px;display:inline-block;}
+.caption{min-height:3.2em;}
+.sort-list{display:grid;gap:10px;margin-top:14px;}
+.sort-item{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--panel);border-radius:14px;padding:12px 16px;border:2px solid transparent;}
+.sort-item.right{border-color:var(--ok);}
+.sort-item.wrong{border-color:var(--bad);}
+.sort-item .why{grid-column:1/-1;font-size:15px;color:var(--ink-2);margin:0;}
+.sort-item .why:empty{display:none;}
+.dw-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:14px;}
+.dw-card{display:grid;gap:10px;align-content:start;}
+.big-num{font-size:30px;font-weight:700;color:var(--blue);}
+.range-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;}
+input[type=range]{accent-color:var(--pink);width:220px;}
+.tiles{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;}
+.tile{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-family:"Space Mono",monospace;font-weight:700;font-size:17px;border:2px solid var(--line);color:var(--ink-2);}
+.tile.printed{background:var(--blue);border-color:var(--blue);color:#fff;}
+.tile.skipped{border-style:dashed;border-color:var(--pink);color:var(--pink);background:var(--pink-soft);}
+.tile.stopped{background:var(--pink);border-color:var(--pink);color:#fff;}
+.tile.never{opacity:.35;}
+.tile-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:15px;color:var(--ink-2);}
+.seg{display:inline-flex;border:2px solid var(--blue);border-radius:999px;overflow:hidden;}
+.seg button{border:0;background:transparent;color:var(--blue);font-weight:600;padding:7px 16px;cursor:pointer;}
+.seg button[aria-pressed="true"]{background:var(--blue);color:#fff;}
+select{font:inherit;padding:7px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%;}
+
+/* ---------- Editor ---------- */
+.editor{display:flex;background:var(--code-bg);border-radius:14px;height:430px;overflow:hidden;font-size:15px;line-height:1.7;}
+.ed-gutter{padding:14px 8px 14px 10px;text-align:right;color:var(--code-dim);user-select:none;overflow:hidden;min-width:4ch;font-family:"Space Mono",monospace;flex:none;}
+.gn{white-space:pre;}
+.gn.cur{color:var(--sun);font-weight:700;} .gn.no{color:var(--pink);font-weight:700;} .gn.err{color:#FF6B75;font-weight:700;}
+.ed-main{position:relative;flex:1;overflow:hidden;}
+.ed-view,.ed-input{position:absolute;inset:0;margin:0;padding:14px 16px 14px 8px;font:inherit;font-family:"Space Mono",ui-monospace,Menlo,Consolas,monospace;line-height:inherit;white-space:pre;tab-size:4;border:0;letter-spacing:0;}
+.ed-view{pointer-events:none;color:var(--code-ink);overflow:hidden;}
+.ed-view .ln{display:block;min-width:max-content;white-space:pre;margin-left:-8px;padding-left:8px;}
+.ed-input{background:transparent;color:transparent;caret-color:#fff;resize:none;outline:none;overflow:auto;}
+.ed-input::selection{background:rgba(125,147,255,.45);}
+.ed-input:focus-visible{box-shadow:inset 0 0 0 3px var(--pink);}
+
+/* ---------- Visualizer ---------- */
+.viz{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;margin-top:18px;}
+.viz-side{display:grid;gap:16px;align-content:start;}
+textarea.input-box{width:100%;min-height:62px;font-size:15px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical;}
+.vars{width:100%;border-collapse:collapse;font-size:15px;}
+.vars th{text-align:left;font-weight:600;color:var(--ink-2);padding:6px 10px;border-bottom:2px solid var(--line);}
+.vars td{padding:6px 10px;border-bottom:1px solid var(--line);font-family:"Space Mono",monospace;}
+.vars tr.changed td{background:var(--pink-soft);}
+.vars tr.changed td:last-child{color:var(--pink);font-weight:700;}
+.vars-empty{color:var(--ink-2);font-size:15px;margin:0;}
+.loop-badge{display:inline-block;font-size:15px;font-weight:600;padding:4px 12px;border-radius:999px;background:var(--sky);color:#123;}
+.loop-badge.off{background:var(--panel);color:var(--ink-2);}
+.preset-desc{font-size:15px;color:var(--ink-2);margin:8px 0 0;}
+
+/* ---------- Quiz ---------- */
+.quiz{max-width:760px;}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;color:var(--ink-2);font-size:15px;}
+.progress{height:8px;background:var(--panel);border-radius:99px;overflow:hidden;margin-bottom:22px;}
+.progress > div{height:100%;background:var(--pink);width:0;transition:width .3s;}
+.quiz h3{font-size:24px;margin-bottom:14px;}
+.options{display:grid;gap:10px;margin:18px 0;}
+.opt{text-align:left;padding:13px 16px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;font-size:17px;display:flex;gap:12px;align-items:baseline;}
+.opt:hover:not(:disabled){border-color:var(--blue);}
+.opt .k{font-weight:700;color:var(--blue);}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent);}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent);}
+.opt:disabled{cursor:default;}
+.feedback{background:var(--panel);border-radius:16px;padding:16px 18px;margin-bottom:16px;}
+.feedback strong{display:block;margin-bottom:4px;font-size:18px;}
+.feedback.good strong{color:var(--ok);} .feedback.bad strong{color:var(--bad);}
+.score-big{font-size:64px;font-weight:700;letter-spacing:-.03em;color:var(--blue);line-height:1;}
+
+/* ---------- Practice ---------- */
+.prac{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;margin-top:18px;}
+.ch-list{display:grid;gap:8px;align-content:start;}
+.ch-btn{text-align:left;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:10px 14px;cursor:pointer;display:grid;gap:2px;}
+.ch-btn:hover{border-color:var(--blue);}
+.ch-btn[aria-current="true"]{border-color:var(--blue);background:var(--panel);}
+.ch-btn .t{font-weight:600;}
+.ch-btn .d{font-size:14px;color:var(--ink-2);}
+.ch-btn .done{color:var(--ok);font-weight:700;}
+.examples{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0 18px;}
+.ex{background:var(--panel);border-radius:14px;padding:12px 14px;}
+.ex pre{margin:4px 0 8px;font-size:14px;white-space:pre-wrap;}
+.results{width:100%;border-collapse:collapse;font-size:15px;margin-top:14px;}
+.results th{text-align:left;color:var(--ink-2);font-weight:600;padding:8px;border-bottom:2px solid var(--line);}
+.results td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top;}
+.results pre{margin:0;font-size:14px;white-space:pre-wrap;word-break:break-word;}
+.pass{color:var(--ok);font-weight:700;} .fail{color:var(--bad);font-weight:700;}
+.hint{background:var(--panel);border-radius:12px;padding:10px 14px;margin:8px 0 0;font-size:16px;}
+.banner{border-radius:14px;padding:12px 16px;font-weight:600;margin-top:14px;}
+.banner.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok);}
+.banner.no{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad);}
+.table-wrap{overflow-x:auto;}
+
+footer{max-width:1120px;margin:0 auto;padding:24px 24px 40px;color:var(--ink-2);font-size:14px;text-align:center;border-top:1px solid var(--line);}
+footer p{max-width:none;margin:0 0 4px;}
+footer .author{font-weight:600;color:var(--ink);}
+
+@media (max-width:860px){
+  .hero,.flow-grid,.two,.viz,.dw-grid,.prac{grid-template-columns:1fr;}
+  .hero{padding:24px;border-radius:22px;}
+  .editor{height:360px;font-size:16px;}
+  body{font-size:16px;}
+  .top::after{opacity:.5;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand-mark">Niñas<br>PRO</div>
+    <div>
+      <p class="brand-course">Curso Semestral de Programación Competitiva</p>
+      <h1>Clase 6: el ciclo while</h1>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Secciones de la clase">
+    <button class="tab" role="tab" data-tab="como" id="t-como" aria-controls="tab-como">Cómo funciona</button>
+    <button class="tab" role="tab" data-tab="versus" id="t-versus" aria-controls="tab-versus">for vs while</button>
+    <button class="tab" role="tab" data-tab="paso" id="t-paso" aria-controls="tab-paso">Paso a paso</button>
+    <button class="tab" role="tab" data-tab="preguntas" id="t-preguntas" aria-controls="tab-preguntas">Preguntas</button>
+    <button class="tab" role="tab" data-tab="practica" id="t-practica" aria-controls="tab-practica">Práctica</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= CÓMO FUNCIONA ================= -->
+<section class="panel" id="tab-como" role="tabpanel" aria-labelledby="t-como">
+  <div class="block hero">
+    <div>
+      <h2>Mientras sigas dormida, el despertador sigue sonando</h2>
+      <p class="lead">Nadie sabe cuántas veces va a sonar. Lo único que sabemos es cuándo tiene que parar. Eso es un <code>while</code>.</p>
+      <p>Enciende el despertador y mira cómo el programa revisa la condición antes de cada vuelta. Cuando quieras, presiona <b>Me levanté</b>.</p>
+      <div class="btn-row">
+        <button class="btn primary" id="alarmStart">Encender despertador</button>
+        <button class="btn pink" id="alarmWake" disabled>Me levanté</button>
+      </div>
+    </div>
+    <div class="alarm-stage">
+      <div class="clock-row">
+        <span class="clock" id="clock" aria-hidden="true">⏰</span>
+        <div>
+          <div class="ring-text" id="ringText" aria-live="polite"></div>
+          <div class="vars-inline">
+            <span class="chip-var" id="chipDormida">dormida = <b id="aDormida">true</b></span>
+            <span class="chip-var" id="chipSonidos">sonidos = <b id="aSonidos">0</b></span>
+          </div>
+        </div>
+      </div>
+      <pre class="code-block" id="alarmCode"></pre>
+      <p class="note" id="alarmNote">El programa está esperando. Enciende el despertador.</p>
+      <pre class="console" id="alarmOut"><span class="muted">(aquí aparece lo que imprime el programa)</span></pre>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Cada vuelta empieza con la misma pregunta</h2>
+    <p>El <code>while</code> pregunta si la condición es verdadera. Si la respuesta es sí, ejecuta el bloque y vuelve a preguntar. Si es no, se sale y el programa sigue después de la llave <code>}</code>.</p>
+    <div class="flow-grid">
+      <svg class="flow-svg" viewBox="0 0 470 350" role="img" aria-label="Diagrama de flujo del ciclo while">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8A90C0"/></marker>
+          <marker id="arrOn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF5FBF"/></marker>
+        </defs>
+        <path class="fedge" id="e-start" d="M200 62 V96" marker-end="url(#arr)"/>
+        <path class="fedge" id="e-yes" d="M200 202 V246" marker-end="url(#arr)"/>
+        <path class="fedge" id="e-no" d="M302 150 H346" marker-end="url(#arr)"/>
+        <path class="fedge" id="e-back" d="M108 290 H42 V150 H96" marker-end="url(#arr)"/>
+        <text class="flabel" x="210" y="230">sí</text>
+        <text class="flabel" x="314" y="140">no</text>
+        <g class="fnode" id="n-start"><rect x="115" y="16" width="170" height="46" rx="12"/><text x="200" y="44" text-anchor="middle">int i = 1;</text></g>
+        <g class="fnode" id="n-cond"><polygon points="200,98 300,150 200,202 100,150"/><text x="200" y="155" text-anchor="middle" id="fCondText">¿i &lt;= 3?</text></g>
+        <g class="fnode" id="n-body"><rect x="108" y="248" width="184" height="84" rx="12"/><text x="200" y="282" text-anchor="middle">cout &lt;&lt; i;</text><text x="200" y="308" text-anchor="middle" id="fIncText">i++;</text></g>
+        <g class="fnode" id="n-exit"><rect x="348" y="124" width="112" height="52" rx="12"/><text x="404" y="147" text-anchor="middle">sigue el</text><text x="404" y="166" text-anchor="middle">programa</text></g>
+      </svg>
+      <div class="flow-side">
+        <pre class="code-block" id="flowCode"></pre>
+        <div class="vars-inline">
+          <span class="chip-var">i = <b id="fI">1</b></span>
+          <span class="chip-var">vueltas = <b id="fV">0</b></span>
+        </div>
+        <pre class="console" id="fOut"></pre>
+        <p class="note" id="fNote" aria-live="polite"></p>
+        <div class="btn-row">
+          <button class="btn small" id="fPrev">Anterior</button>
+          <button class="btn small primary" id="fNext">Siguiente paso</button>
+          <button class="btn small" id="fPlay">Reproducir</button>
+          <button class="btn small" id="fReset">Reiniciar</button>
+          <span class="step-count" id="fCount"></span>
+        </div>
+        <div class="controls-row">
+          <label>Repetir mientras <code>i &lt;=</code> <input type="number" id="fN" min="1" max="8" value="3"></label>
+          <label><input type="checkbox" id="fForget"> Olvidar el <code>i++</code></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Regla de oro</h2>
+    <p>Dentro del <code>while</code>, algo tiene que cambiar para que la condición se vuelva falsa en algún momento. Si nada cambia, el programa se queda repitiendo para siempre: un <b>loop infinito</b>, como un despertador que nunca apagas.</p>
+  </div>
+</section>
+
+<!-- ================= FOR VS WHILE ================= -->
+<section class="panel" id="tab-versus" role="tabpanel" aria-labelledby="t-versus" hidden>
+  <div class="block">
+    <h2>De for a while: las mismas tres piezas, en otro lugar</h2>
+    <p>Un <code>for</code> junta el inicio, la condición y el incremento en una sola línea. En un <code>while</code> esas piezas siguen existiendo, pero cada una va en su propio lugar.</p>
+    <div class="two">
+      <div>
+        <span class="label">for</span>
+        <pre class="code-block" id="vsFor"></pre>
+      </div>
+      <div>
+        <span class="label">while</span>
+        <pre class="code-block" id="vsWhile"></pre>
+      </div>
+    </div>
+    <ul class="legend">
+      <li><span class="sw" style="background:rgba(125,147,255,.7)"></span>Inicio</li>
+      <li><span class="sw" style="background:rgba(255,95,191,.7)"></span>Condición</li>
+      <li><span class="sw" style="background:rgba(255,201,77,.8)"></span>Incremento</li>
+    </ul>
+    <p class="note caption" id="vsCap" style="margin-top:14px"></p>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn small" id="vsPrev">Anterior</button>
+      <button class="btn small primary" id="vsNext">Siguiente</button>
+      <span class="step-count" id="vsCount"></span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>¿for o while?</h2>
+    <p>Usa <code>for</code> cuando sabes cuántas veces vas a repetir (5 veces, 10 veces, N veces). Usa <code>while</code> cuando repites hasta que pase algo. Clasifica estas situaciones:</p>
+    <div class="sort-list" id="sortList"></div>
+    <p class="step-count" id="sortScore" style="margin-top:10px"></p>
+  </div>
+
+  <div class="block">
+    <h2>while vs do-while</h2>
+    <p><code>while</code> revisa la condición <b>antes</b> de entrar. <code>do-while</code> ejecuta el bloque primero y revisa <b>después</b>, así que siempre corre al menos una vez. Mueve el valor inicial de <code>x</code> y compara.</p>
+    <div class="range-row">
+      <label for="dwX"><b>Valor inicial de x:</b></label>
+      <input type="range" id="dwX" min="-2" max="6" value="0">
+      <span class="big-num" id="dwXv">0</span>
+    </div>
+    <div class="dw-grid">
+      <div class="dw-card">
+        <span class="label">while</span>
+        <pre class="code-block" id="dwWhileCode"></pre>
+        <span class="label">Imprime</span>
+        <pre class="console" id="dwWhileOut"></pre>
+        <div>Vueltas: <span class="big-num" id="dwWhileN">0</span></div>
+      </div>
+      <div class="dw-card">
+        <span class="label">do-while</span>
+        <pre class="code-block" id="dwDoCode"></pre>
+        <span class="label">Imprime</span>
+        <pre class="console" id="dwDoOut"></pre>
+        <div>Vueltas: <span class="big-num" id="dwDoN">0</span></div>
+      </div>
+    </div>
+    <p class="note" id="dwNote" style="margin-top:16px"></p>
+  </div>
+
+  <div class="block">
+    <h2>break y continue</h2>
+    <p><code>break</code> es la salida de emergencia: sale del ciclo inmediatamente. <code>continue</code> salta el resto de esta vuelta y pasa a la siguiente, como saltar una canción en la playlist.</p>
+    <div class="controls-row" style="margin-top:8px">
+      <div class="seg" role="group" aria-label="Instrucción">
+        <button id="bcBreak" aria-pressed="false">break</button>
+        <button id="bcCont" aria-pressed="true">continue</button>
+      </div>
+      <label>Condición del if:
+        <select id="bcCond">
+          <option value="i % 3 == 0">i % 3 == 0</option>
+          <option value="i == 5">i == 5</option>
+          <option value="i % 2 == 0">i % 2 == 0</option>
+          <option value="i > 7">i &gt; 7</option>
+        </select>
+      </label>
+    </div>
+    <div class="two" style="margin-top:14px">
+      <pre class="code-block" id="bcCode"></pre>
+      <div>
+        <div class="tiles" id="bcTiles"></div>
+        <div class="tile-legend">
+          <span>Azul: se imprimió</span><span>Rosado punteado: se saltó</span><span>Rosado lleno: aquí salió</span><span>Transparente: nunca llegó</span>
+        </div>
+        <p class="note" id="bcNote" style="margin-top:14px"></p>
+      </div>
+    </div>
+    <p style="margin-top:16px">Fíjate en que el <code>i++</code> está al <b>comienzo</b> del bloque. Si estuviera al final, <code>continue</code> se lo saltaría y <code>i</code> nunca cambiaría: loop infinito.</p>
+  </div>
+</section>
+
+<!-- ================= PASO A PASO ================= -->
+<section class="panel" id="tab-paso" role="tabpanel" aria-labelledby="t-paso" hidden>
+  <div class="block">
+    <h2>Mira tu código correr, línea por línea</h2>
+    <p>Elige un ejemplo o escribe tu propio código en C++. Con <b>Paso a paso</b> ves qué línea se ejecuta, cuánto vale cada variable y en qué vuelta va el ciclo. Lo que el programa lee con <code>cin</code> se escribe en la caja <b>Entrada</b>, separado por espacios.</p>
+    <div class="controls-row">
+      <label>Ejemplo:
+        <select id="presetSel"></select>
+      </label>
+    </div>
+    <p class="preset-desc" id="presetDesc"></p>
+    <div class="viz">
+      <div>
+        <div id="pasoEditor"></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn primary" id="runBtn">Ejecutar</button>
+          <button class="btn pink" id="traceBtn">Paso a paso</button>
+        </div>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn small" id="prevBtn" disabled>Anterior</button>
+          <button class="btn small" id="nextBtn" disabled>Siguiente</button>
+          <button class="btn small" id="playBtn" disabled>Reproducir</button>
+          <button class="btn small" id="endBtn" disabled>Ir al final</button>
+          <label class="step-count">Velocidad
+            <select id="speedSel">
+              <option value="1200">Lenta</option>
+              <option value="600" selected>Normal</option>
+              <option value="220">Rápida</option>
+              <option value="60">Turbo</option>
+            </select>
+          </label>
+        </div>
+        <p class="step-count" id="stepInfo" style="margin-top:8px"></p>
+      </div>
+      <div class="viz-side">
+        <div>
+          <label class="label" for="pasoInput">Entrada (lo que lee <code>cin</code>)</label>
+          <textarea class="input-box mono" id="pasoInput" spellcheck="false" placeholder="Ej: 3 9 7"></textarea>
+        </div>
+        <div>
+          <span class="label">Qué está pasando</span>
+          <p class="note" id="pasoNote" aria-live="polite">Presiona Paso a paso para empezar.</p>
+        </div>
+        <div><span class="loop-badge off" id="loopBadge">Fuera de ciclos</span></div>
+        <div>
+          <span class="label">Variables</span>
+          <div id="pasoVars"><p class="vars-empty">Todavía no hay variables.</p></div>
+        </div>
+        <div>
+          <span class="label">Salida (en amarillo, lo que se escribió en la entrada)</span>
+          <pre class="console" id="pasoOut"><span class="muted">(sin salida todavía)</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PREGUNTAS ================= -->
+<section class="panel" id="tab-preguntas" role="tabpanel" aria-labelledby="t-preguntas" hidden>
+  <div class="block quiz" id="quiz"></div>
+</section>
+
+<!-- ================= PRÁCTICA ================= -->
+<section class="panel" id="tab-practica" role="tabpanel" aria-labelledby="t-practica" hidden>
+  <div class="block">
+    <h2>Práctica</h2>
+    <p>Resuelve cada problema con un <code>while</code> (o un <code>do-while</code>). Al presionar <b>Probar</b>, tu programa corre con varios casos de prueba, como en una competencia. Imprime solo lo que pide el enunciado: sin mensajes extra como "Ingresa un número".</p>
+    <div class="prac">
+      <div class="ch-list" id="chList"></div>
+      <div>
+        <h3 id="chTitle"></h3>
+        <div id="chText"></div>
+        <div class="examples" id="chExamples"></div>
+        <div id="pracEditor"></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn primary" id="pracRun">Probar</button>
+          <button class="btn" id="pracHint">Ver una pista</button>
+          <button class="btn" id="pracDebug">Abrir en Paso a paso</button>
+          <button class="btn pink" id="pracSol">Ver solución</button>
+          <button class="btn small" id="pracReset">Volver al código inicial</button>
+        </div>
+        <div id="pracHints"></div>
+        <div id="pracResults"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer>
+  <p>Ciclo While Niñas Pro 2026.</p>
+  <p class="author">Created by: Javier Catalán</p>
+</footer>
+
+<script>
+/* =====================================================================
+   Mini intérprete de C++ (subconjunto para la clase)
+   ===================================================================== */
+const MAX_STEPS = 60000;
+class CErr extends Error { constructor(line, msg){ super(msg); this.line = line; } }
+
+function tokenize(src){
+  src = src.replace(/[\u201C\u201D]/g,'"').replace(/[\u2018\u2019]/g,"'").replace(/\r/g,'');
+  const toks = []; let i = 0, line = 1;
+  const ops = ['<<','>>','<=','>=','==','!=','&&','||','++','--','+=','-=','*=','/=','%=','::','+','-','*','/','%','<','>','=','!','(',')','{','}',';',',','[',']',':','?'];
+  while (i < src.length){
+    const c = src[i];
+    if (c === '\n'){ line++; i++; continue; }
+    if (/\s/.test(c)){ i++; continue; }
+    if (c === '/' && src[i+1] === '/'){ while (i < src.length && src[i] !== '\n') i++; continue; }
+    if (c === '/' && src[i+1] === '*'){ i += 2; while (i < src.length && !(src[i] === '*' && src[i+1] === '/')){ if (src[i] === '\n') line++; i++; } i += 2; continue; }
+    if (c === '#'){ while (i < src.length && src[i] !== '\n') i++; continue; }
+    if (/[0-9]/.test(c) || (c === '.' && /[0-9]/.test(src[i+1]||''))){
+      let j = i; while (j < src.length && /[0-9.]/.test(src[j])) j++;
+      const s = src.slice(i, j);
+      toks.push({t:'num', v:parseFloat(s), isFloat:s.includes('.'), line}); i = j; continue;
+    }
+    if (/[A-Za-z_]/.test(c)){
+      let j = i; while (j < src.length && /[A-Za-z0-9_]/.test(src[j])) j++;
+      toks.push({t:'id', v:src.slice(i, j), line}); i = j; continue;
+    }
+    if (c === '"'){
+      let j = i + 1, s = '';
+      while (j < src.length && src[j] !== '"'){
+        if (src[j] === '\n') throw new CErr(line, 'Falta cerrar las comillas " del texto.');
+        if (src[j] === '\\'){ const n = src[j+1]; s += n === 'n' ? '\n' : n === 't' ? '\t' : n; j += 2; }
+        else { s += src[j]; j++; }
+      }
+      if (j >= src.length) throw new CErr(line, 'Falta cerrar las comillas " del texto.');
+      toks.push({t:'str', v:s, line}); i = j + 1; continue;
+    }
+    if (c === "'"){
+      let j = i + 1; let ch = src[j];
+      if (ch === '\\'){ const n = src[j+1]; ch = n === 'n' ? '\n' : n === 't' ? '\t' : n; j++; }
+      j++;
+      if (src[j] !== "'") throw new CErr(line, "Un char va entre comillas simples y tiene una sola letra, por ejemplo 'a'.");
+      toks.push({t:'chr', v:ch, line}); i = j + 1; continue;
+    }
+    const m = ops.find(o => src.startsWith(o, i));
+    if (m){ toks.push({t:'op', v:m, line}); i += m.length; continue; }
+    throw new CErr(line, 'No entiendo el símbolo "' + c + '".');
+  }
+  toks.push({t:'eof', v:'', line});
+  return toks;
+}
+
+const TYPES = new Set(['int','long','double','float','bool','string','char','short','unsigned','auto','const']);
+const KEYWORDS = new Set(['while','for','if','else','do','break','continue','return']);
+
+function parse(toks){
+  let p = 0;
+  const peek = (k=0) => toks[Math.min(p+k, toks.length-1)];
+  const isOp = (v,k=0) => peek(k).t === 'op' && peek(k).v === v;
+  const isId = (v,k=0) => peek(k).t === 'id' && peek(k).v === v;
+  const next = () => toks[p++];
+  function expect(v){
+    if (isOp(v) || isId(v)) return next();
+    if (v === ';'){ const prev = toks[Math.max(0,p-1)]; throw new CErr(prev.line, 'Falta un punto y coma ; al final de la línea ' + prev.line + '.'); }
+    const t = peek();
+    throw new CErr(t.line, 'Esperaba "' + v + '" pero encontré ' + (t.t === 'eof' ? 'el final del código' : '"' + t.v + '"') + '.');
+  }
+  function isTypeStart(){ return peek().t === 'id' && TYPES.has(peek().v); }
+  function parseType(){
+    const w = []; while (peek().t === 'id' && TYPES.has(peek().v)) w.push(next().v);
+    if (isOp('::')) { next(); }
+    if (w.includes('double') || w.includes('float')) return 'double';
+    if (w.includes('bool')) return 'bool';
+    if (w.includes('string')) return 'string';
+    if (w.includes('char')) return 'char';
+    if (w.includes('auto')) return 'auto';
+    return 'int';
+  }
+  function decl(){
+    const line = peek().line; const type = parseType(); const vars = [];
+    while (true){
+      const nt = next();
+      if (nt.t !== 'id' || KEYWORDS.has(nt.v) || TYPES.has(nt.v)) throw new CErr(nt.line, 'Esperaba el nombre de una variable después del tipo.');
+      let init = null;
+      if (isOp('=')){ next(); init = assign(); }
+      vars.push({name:nt.v, init});
+      if (isOp(',')){ next(); continue; }
+      break;
+    }
+    return {k:'decl', type, vars, line};
+  }
+  function program(){
+    const body = [];
+    while (peek().t !== 'eof'){
+      if (isId('using')){ while (!isOp(';') && peek().t !== 'eof') next(); expect(';'); continue; }
+      if (isTypeStart() && peek(1).t === 'id' && peek(1).v === 'main'){
+        next(); next(); expect('('); while (!isOp(')') && peek().t !== 'eof') next(); expect(')');
+        const b = block(); body.push(...b.body); continue;
+      }
+      body.push(statement());
+    }
+    return {k:'block', body, noScope:true, line:1};
+  }
+  function block(){
+    const open = expect('{'); const body = [];
+    while (!isOp('}')){
+      if (peek().t === 'eof') throw new CErr(open.line, 'Falta cerrar la llave { que se abrió en la línea ' + open.line + '.');
+      body.push(statement());
+    }
+    next();
+    return {k:'block', body, line:open.line};
+  }
+  function statement(){
+    const t = peek(), line = t.line;
+    if (isOp('{')) return block();
+    if (isOp(';')){ next(); return {k:'empty', line}; }
+    if (isId('while')){ next(); expect('('); const cond = expr(); expect(')'); const body = statement(); return {k:'while', cond, body, line}; }
+    if (isId('do')){
+      next(); const body = statement();
+      if (!isId('while')) throw new CErr(peek().line, 'Después del bloque do { } va while (condición);');
+      const condLine = next().line; expect('('); const cond = expr(); expect(')'); expect(';');
+      return {k:'dowhile', cond, body, line, condLine};
+    }
+    if (isId('for')){
+      next(); expect('(');
+      let init = null;
+      if (!isOp(';')) init = isTypeStart() ? decl() : {k:'expr', e:expr(), line};
+      expect(';');
+      const cond = isOp(';') ? null : expr(); expect(';');
+      const upd = isOp(')') ? null : expr(); expect(')');
+      const body = statement();
+      return {k:'for', init, cond, upd, body, line};
+    }
+    if (isId('if')){
+      next(); expect('('); const cond = expr(); expect(')'); const then = statement();
+      let els = null; if (isId('else')){ next(); els = statement(); }
+      return {k:'if', cond, then, els, line};
+    }
+    if (isId('else')) throw new CErr(line, 'Este else no tiene un if antes. ¿Pusiste un ; después del if?');
+    if (isId('break')){ next(); expect(';'); return {k:'break', line}; }
+    if (isId('continue')){ next(); expect(';'); return {k:'continue', line}; }
+    if (isId('return')){ next(); if (!isOp(';')) expr(); expect(';'); return {k:'return', line}; }
+    if (isId('cout') || isId('cerr')){
+      next(); if (!isOp('<<')) throw new CErr(line, 'Después de cout va <<, por ejemplo: cout << x;');
+      const items = []; while (isOp('<<')){ next(); items.push(additive()); }
+      expect(';'); return {k:'cout', items, line};
+    }
+    if (isId('cin')){
+      next(); if (!isOp('>>')) throw new CErr(line, 'Después de cin va >>, por ejemplo: cin >> x;');
+      const targets = [];
+      while (isOp('>>')){ next(); const id = next(); if (id.t !== 'id') throw new CErr(id.line, 'Después de cin >> va el nombre de una variable.'); targets.push(id.v); }
+      expect(';'); return {k:'cin', targets, line};
+    }
+    if (isTypeStart()){ const d = decl(); expect(';'); return d; }
+    const e = expr(); expect(';'); return {k:'expr', e, line};
+  }
+  const ASSIGN = ['=','+=','-=','*=','/=','%='];
+  function expr(){ return assign(); }
+  function assign(){
+    const left = orE();
+    if (peek().t === 'op' && ASSIGN.includes(peek().v)){
+      const op = next().v;
+      if (left.k !== 'var') throw new CErr(left.line, 'Solo puedes asignar un valor a una variable.');
+      const right = assign();
+      return {k:'assign', op, name:left.name, right, line:left.line};
+    }
+    return left;
+  }
+  function bin(sub, list){ return function(){ let l = sub(); while (peek().t === 'op' && list.includes(peek().v)){ const op = next().v; const r = sub(); l = {k:'bin', op, l, r, line:l.line}; } return l; }; }
+  function unary(){
+    const t = peek();
+    if (t.t === 'op' && (t.v === '!' || t.v === '-' || t.v === '+')){ next(); return {k:'un', op:t.v, e:unary(), line:t.line}; }
+    if (t.t === 'op' && (t.v === '++' || t.v === '--')){ next(); const e = unary(); if (e.k !== 'var') throw new CErr(t.line, t.v + ' solo funciona con una variable.'); return {k:'pre', op:t.v, name:e.name, line:t.line}; }
+    return postfix();
+  }
+  function postfix(){
+    let e = primary();
+    while (peek().t === 'op' && (peek().v === '++' || peek().v === '--')){
+      const op = next().v; if (e.k !== 'var') throw new CErr(e.line, op + ' solo funciona con una variable.');
+      e = {k:'post', op, name:e.name, line:e.line};
+    }
+    return e;
+  }
+  function primary(){
+    const t = next();
+    if (t.t === 'num') return {k:'num', v:t.v, type:t.isFloat ? 'double' : 'int', line:t.line};
+    if (t.t === 'str') return {k:'str', v:t.v, line:t.line};
+    if (t.t === 'chr') return {k:'chr', v:t.v, line:t.line};
+    if (t.t === 'id'){
+      if (t.v === 'true' || t.v === 'false') return {k:'bool', v:t.v === 'true', line:t.line};
+      if (t.v === 'endl') return {k:'endl', line:t.line};
+      if (t.v === 'cin'){
+        const targets = [];
+        while (isOp('>>')){ next(); const id = next(); if (id.t !== 'id') throw new CErr(id.line, 'Después de cin >> va el nombre de una variable.'); targets.push(id.v); }
+        if (!targets.length) throw new CErr(t.line, 'Después de cin va >>.');
+        return {k:'cinExpr', targets, line:t.line};
+      }
+      if (TYPES.has(t.v) || KEYWORDS.has(t.v)) throw new CErr(t.line, '"' + t.v + '" no puede ir en esta parte del código.');
+      return {k:'var', name:t.v, line:t.line};
+    }
+    if (t.t === 'op' && t.v === '('){ const e = expr(); expect(')'); return e; }
+    if (t.t === 'eof') throw new CErr(t.line, 'El código terminó antes de tiempo. ¿Falta algo al final?');
+    throw new CErr(t.line, 'No esperaba "' + t.v + '" aquí.');
+  }
+  const mul = bin(unary, ['*','/','%']);
+  const additive = bin(mul, ['+','-']);
+  const rel = bin(additive, ['<','>','<=','>=']);
+  const eq = bin(rel, ['==','!=']);
+  const andE = bin(eq, ['&&']);
+  const orE = bin(andE, ['||']);
+  return program();
+}
+
+function numOf(v, line){
+  if (v.t === 'bool') return v.v ? 1 : 0;
+  if (v.t === 'char') return v.v.charCodeAt(0);
+  if (v.t === 'string') throw new CErr(line, 'Aquí se necesita un número, pero hay un texto.');
+  return v.v;
+}
+function truthy(v, line){
+  if (v.t === 'string') throw new CErr(line, 'Un texto no se puede usar como condición.');
+  return numOf(v, line) !== 0;
+}
+function coerce(v, type, line){
+  if (type === 'auto') return v;
+  if (type === 'string'){
+    if (v.t !== 'string' && v.t !== 'char') throw new CErr(line, 'A un string solo le puedes guardar texto entre comillas.');
+    return {v:String(v.v), t:'string'};
+  }
+  if (v.t === 'string') throw new CErr(line, 'No puedes guardar un texto en una variable de tipo ' + type + '.');
+  if (type === 'int') return {v:Math.trunc(numOf(v, line)), t:'int'};
+  if (type === 'double') return {v:numOf(v, line), t:'double'};
+  if (type === 'bool') return {v:numOf(v, line) !== 0, t:'bool'};
+  if (type === 'char') return v.t === 'char' ? v : {v:String.fromCharCode(numOf(v, line)), t:'char'};
+  return v;
+}
+function binop(op, a, b, line){
+  const isS = x => x.t === 'string';
+  if (isS(a) || isS(b)){
+    if (op === '+'){
+      if ((isS(a) || a.t === 'char') && (isS(b) || b.t === 'char')) return {v:String(a.v) + String(b.v), t:'string'};
+      throw new CErr(line, 'En C++ no puedes sumar un texto con un número.');
+    }
+    if (['==','!=','<','>','<=','>='].includes(op)){
+      if (!(isS(a) && isS(b))) throw new CErr(line, 'Solo puedes comparar un texto con otro texto.');
+      return {v:cmp(op, a.v, b.v), t:'bool'};
+    }
+    throw new CErr(line, 'El operador ' + op + ' no funciona con texto.');
+  }
+  const x = numOf(a, line), y = numOf(b, line);
+  const intish = t => t === 'int' || t === 'bool' || t === 'char';
+  const bothInt = intish(a.t) && intish(b.t);
+  const rt = bothInt ? 'int' : 'double';
+  switch (op){
+    case '+': return {v:x + y, t:rt};
+    case '-': return {v:x - y, t:rt};
+    case '*': return {v:x * y, t:rt};
+    case '/':
+      if (bothInt){ if (y === 0) throw new CErr(line, 'División por cero: no se puede dividir entre 0.'); return {v:Math.trunc(x / y), t:'int'}; }
+      return {v:x / y, t:'double'};
+    case '%':
+      if (!bothInt) throw new CErr(line, 'El operador % (resto) solo funciona con números enteros.');
+      if (y === 0) throw new CErr(line, 'No se puede calcular el resto de dividir entre 0.');
+      return {v:x % y, t:'int'};
+    default: return {v:cmp(op, x, y), t:'bool'};
+  }
+}
+function cmp(op, x, y){
+  switch (op){ case '<': return x < y; case '>': return x > y; case '<=': return x <= y; case '>=': return x >= y; case '==': return x === y; case '!=': return x !== y; }
+  return false;
+}
+function fmt(v){
+  if (v.t === 'bool') return v.v ? '1' : '0';
+  if (v.t === 'double'){ if (!isFinite(v.v)) return v.v > 0 ? 'inf' : v.v < 0 ? '-inf' : 'nan'; return Number.isInteger(v.v) ? String(v.v) : String(Number(v.v.toPrecision(6))); }
+  return String(v.v);
+}
+function fmtVar(x){
+  if (!x.val) return '?';
+  if (x.val.t === 'string') return '"' + x.val.v + '"';
+  if (x.val.t === 'char') return "'" + x.val.v + "'";
+  if (x.val.t === 'bool') return x.val.v ? 'true' : 'false';
+  return fmt(x.val);
+}
+
+class Interp {
+  constructor(ast, input, trace){
+    this.ast = ast; this.input = input; this.trace = trace;
+    this.scopes = [new Map()]; this.out = ''; this.disp = []; this.steps = 0; this.loops = [];
+  }
+  write(s, kind){
+    this.out += kind === 'in' ? '' : s;
+    const last = this.disp[this.disp.length - 1];
+    if (last && last.t === kind) last.s += s; else this.disp.push({t:kind, s});
+    if (this.out.length > 60000) throw new CErr(null, 'El programa imprimió demasiado texto. ¿Hay un loop infinito?');
+  }
+  vars(){
+    const seen = new Map();
+    for (const s of this.scopes) for (const [k, x] of s) seen.set(k, x);
+    return [...seen].map(([name, x]) => ({name, type:x.type, value:fmtVar(x)}));
+  }
+  snap(line, note, extra){
+    if (++this.steps > MAX_STEPS) throw new CErr(line, 'El programa ya lleva más de 60.000 pasos y no termina. Seguramente es un loop infinito: revisa que dentro del ciclo cambie algo que haga falsa la condición.');
+    if (!this.trace) return 0;
+    const L = this.loops[this.loops.length - 1];
+    return Object.assign({line, note, vars:this.vars(), disp:this.disp.map(d => ({...d})), loop: L ? {...L} : null}, extra || {});
+  }
+  final(){ return {line:null, note:'El programa terminó.', vars:this.vars(), disp:this.disp.map(d => ({...d})), loop:null, done:true}; }
+  lookup(name, line){
+    for (let i = this.scopes.length - 1; i >= 0; i--) if (this.scopes[i].has(name)) return this.scopes[i].get(name);
+    if (/^_+$/.test(name)) throw new CErr(line, 'Todavía falta completar el espacio ' + name + '. Reemplázalo por lo que corresponda.');
+    throw new CErr(line, 'La variable "' + name + '" no existe. ¿Olvidaste declararla? (por ejemplo: int ' + name + ' = 0;)');
+  }
+  readInto(name, line){
+    const x = this.lookup(name, line);
+    if (!this.input.length) return false;
+    let tok = this.input.shift();
+    let val;
+    if (x.type === 'int'){ if (!/^[+-]?\d+$/.test(tok)) throw new CErr(line, 'cin leyó "' + tok + '", pero ' + name + ' es int y solo guarda números enteros.'); val = {v:parseInt(tok, 10), t:'int'}; }
+    else if (x.type === 'double'){ const n = Number(tok); if (isNaN(n)) throw new CErr(line, 'cin leyó "' + tok + '", pero ' + name + ' guarda números.'); val = {v:n, t:'double'}; }
+    else if (x.type === 'bool'){ if (tok !== '0' && tok !== '1') throw new CErr(line, 'Para un bool, cin espera 0 o 1.'); val = {v:tok === '1', t:'bool'}; }
+    else if (x.type === 'char'){ if (tok.length > 1) this.input.unshift(tok.slice(1)); tok = tok[0]; val = {v:tok, t:'char'}; }
+    else val = {v:tok, t:'string'};
+    x.val = val;
+    this.write(tok + '\n', 'in');
+    return true;
+  }
+  *exec(s){
+    switch (s.k){
+      case 'block': {
+        if (!s.noScope) this.scopes.push(new Map());
+        try { for (const c of s.body){ const r = yield* this.exec(c); if (r) return r; } }
+        finally { if (!s.noScope) this.scopes.pop(); }
+        return null;
+      }
+      case 'empty': return null;
+      case 'decl': {
+        const sc = this.scopes[this.scopes.length - 1];
+        for (const d of s.vars){
+          if (sc.has(d.name)) throw new CErr(s.line, 'La variable "' + d.name + '" ya fue creada antes. Para cambiar su valor, escribe ' + d.name + ' = ...; sin el tipo.');
+          let type = s.type, val = null;
+          if (d.init){ const v = this.ev(d.init); if (type === 'auto') type = v.t; val = coerce(v, type, s.line); }
+          else if (type === 'auto') throw new CErr(s.line, 'Una variable auto necesita un valor inicial.');
+          sc.set(d.name, {type, val});
+        }
+        yield this.snap(s.line, 'Se crea ' + s.vars.map(d => d.name).join(', ') + '.');
+        return null;
+      }
+      case 'expr': {
+        this.ev(s.e);
+        yield this.snap(s.line, describeExpr(s.e, this));
+        return null;
+      }
+      case 'cout': {
+        let piece = '';
+        for (const it of s.items) piece += it.k === 'endl' ? '\n' : fmt(this.ev(it));
+        this.write(piece, 'out');
+        yield this.snap(s.line, 'Imprime ' + showText(piece) + '.');
+        return null;
+      }
+      case 'cin': {
+        for (const n of s.targets){
+          if (!this.readInto(n, s.line)) throw new CErr(s.line, 'cin quiere leer un dato, pero la entrada ya no tiene más. Agrega datos en la caja Entrada.');
+        }
+        yield this.snap(s.line, 'cin lee ' + s.targets.map(n => n + ' = ' + fmtVar(this.lookup(n))).join(', ') + '.');
+        return null;
+      }
+      case 'if': {
+        const c = truthy(this.ev(s.cond), s.line);
+        yield this.snap(s.line, c ? 'La condición del if es verdadera: entra al if.' : 'La condición del if es falsa' + (s.els ? ': va al else.' : ': se salta el if.'), {cond:c});
+        if (c) return yield* this.exec(s.then);
+        if (s.els) return yield* this.exec(s.els);
+        return null;
+      }
+      case 'while': {
+        const L = {kind:'while', line:s.line, iter:0}; this.loops.push(L);
+        try {
+          while (true){
+            const c = truthy(this.ev(s.cond), s.line);
+            yield this.snap(s.line, c ? 'La condición es verdadera: empieza la vuelta ' + (L.iter + 1) + '.' : 'La condición es falsa: el while termina después de ' + L.iter + (L.iter === 1 ? ' vuelta.' : ' vueltas.'), {cond:c});
+            if (!c) break;
+            L.iter++;
+            const r = yield* this.exec(s.body);
+            if (r === 'break') break;
+            if (r === 'return') return r;
+          }
+        } finally { this.loops.pop(); }
+        return null;
+      }
+      case 'dowhile': {
+        const L = {kind:'do-while', line:s.line, iter:0}; this.loops.push(L);
+        try {
+          while (true){
+            L.iter++;
+            if (L.iter === 1) yield this.snap(s.line, 'do: entra al bloque sin revisar la condición (vuelta 1).');
+            const r = yield* this.exec(s.body);
+            if (r === 'break') break;
+            if (r === 'return') return r;
+            const c = truthy(this.ev(s.cond), s.condLine);
+            yield this.snap(s.condLine, c ? 'La condición es verdadera: repite (vuelta ' + (L.iter + 1) + ').' : 'La condición es falsa: el do-while termina después de ' + L.iter + (L.iter === 1 ? ' vuelta.' : ' vueltas.'), {cond:c});
+            if (!c) break;
+          }
+        } finally { this.loops.pop(); }
+        return null;
+      }
+      case 'for': {
+        this.scopes.push(new Map());
+        const L = {kind:'for', line:s.line, iter:0}; this.loops.push(L);
+        try {
+          if (s.init) yield* this.exec(s.init);
+          while (true){
+            const c = s.cond ? truthy(this.ev(s.cond), s.line) : true;
+            yield this.snap(s.line, c ? 'La condición del for es verdadera: empieza la vuelta ' + (L.iter + 1) + '.' : 'La condición del for es falsa: el for termina.', {cond:c});
+            if (!c) break;
+            L.iter++;
+            const r = yield* this.exec(s.body);
+            if (r === 'break') break;
+            if (r === 'return') return r;
+            if (s.upd){ this.ev(s.upd); yield this.snap(s.line, 'Incremento del for: ' + describeExpr(s.upd, this)); }
+          }
+        } finally { this.loops.pop(); this.scopes.pop(); }
+        return null;
+      }
+      case 'break': {
+        if (!this.loops.length) throw new CErr(s.line, 'break solo se puede usar dentro de un ciclo.');
+        yield this.snap(s.line, 'break: sale del ciclo inmediatamente.');
+        return 'break';
+      }
+      case 'continue': {
+        if (!this.loops.length) throw new CErr(s.line, 'continue solo se puede usar dentro de un ciclo.');
+        yield this.snap(s.line, 'continue: se salta el resto de esta vuelta y vuelve a la condición.');
+        return 'continue';
+      }
+      case 'return': {
+        yield this.snap(s.line, 'return: el programa termina.');
+        return 'return';
+      }
+    }
+    return null;
+  }
+  ev(e){
+    switch (e.k){
+      case 'num': return {v:e.v, t:e.type};
+      case 'str': return {v:e.v, t:'string'};
+      case 'chr': return {v:e.v, t:'char'};
+      case 'bool': return {v:e.v, t:'bool'};
+      case 'endl': throw new CErr(e.line, 'endl solo se usa con cout.');
+      case 'var': {
+        const x = this.lookup(e.name, e.line);
+        if (!x.val) throw new CErr(e.line, 'La variable "' + e.name + '" todavía no tiene valor. Dale uno al crearla (int ' + e.name + ' = 0;) o léela con cin.');
+        return x.val;
+      }
+      case 'assign': {
+        const x = this.lookup(e.name, e.line);
+        let r = this.ev(e.right);
+        if (e.op !== '='){
+          if (!x.val) throw new CErr(e.line, 'La variable "' + e.name + '" todavía no tiene valor, así que no se le puede sumar ni restar nada.');
+          r = binop(e.op[0], x.val, r, e.line);
+        }
+        x.val = coerce(r, x.type, e.line);
+        return x.val;
+      }
+      case 'pre': case 'post': {
+        const x = this.lookup(e.name, e.line);
+        if (!x.val) throw new CErr(e.line, 'La variable "' + e.name + '" todavía no tiene valor.');
+        if (x.type === 'string') throw new CErr(e.line, '++ y -- solo funcionan con números.');
+        const old = x.val;
+        x.val = coerce({v:numOf(old, e.line) + (e.op === '++' ? 1 : -1), t:x.type === 'double' ? 'double' : 'int'}, x.type, e.line);
+        return e.k === 'pre' ? x.val : old;
+      }
+      case 'un': {
+        const v = this.ev(e.e);
+        if (e.op === '!') return {v:!truthy(v, e.line), t:'bool'};
+        const n = numOf(v, e.line);
+        return {v:e.op === '-' ? -n : n, t:v.t === 'double' ? 'double' : 'int'};
+      }
+      case 'bin': {
+        if (e.op === '&&'){ if (!truthy(this.ev(e.l), e.line)) return {v:false, t:'bool'}; return {v:truthy(this.ev(e.r), e.line), t:'bool'}; }
+        if (e.op === '||'){ if (truthy(this.ev(e.l), e.line)) return {v:true, t:'bool'}; return {v:truthy(this.ev(e.r), e.line), t:'bool'}; }
+        return binop(e.op, this.ev(e.l), this.ev(e.r), e.line);
+      }
+      case 'cinExpr': {
+        for (const n of e.targets) if (!this.readInto(n, e.line)) return {v:false, t:'bool'};
+        return {v:true, t:'bool'};
+      }
+    }
+    throw new CErr(e.line, 'No sé cómo evaluar esta expresión.');
+  }
+}
+function showText(s){ return '"' + s.replace(/\n/g, '⏎') + '"'; }
+function describeExpr(e, it){
+  const name = e.name;
+  if ((e.k === 'assign' || e.k === 'pre' || e.k === 'post') && name){
+    try { return 'Ahora ' + name + ' vale ' + fmtVar(it.lookup(name)) + '.'; } catch (_) {}
+  }
+  return 'Se ejecuta la línea.';
+}
+function inputTokens(s){ return (s || '').split(/\s+/).filter(Boolean); }
+function runProgram(src, input, opts){
+  opts = opts || {};
+  const res = {out:'', disp:[], frames:[], error:null, truncated:false};
+  let it = null;
+  try {
+    const ast = parse(tokenize(src));
+    it = new Interp(ast, inputTokens(input), !!opts.trace);
+    const max = opts.maxFrames || 2500;
+    for (const f of it.exec(ast)){
+      if (opts.trace){ if (res.frames.length >= max){ res.truncated = true; break; } res.frames.push(f); }
+    }
+    if (opts.trace && !res.truncated) res.frames.push(it.final());
+  } catch (e){
+    res.error = e instanceof CErr ? {line:e.line, msg:e.message} : {line:null, msg:'Error inesperado: ' + e.message};
+  }
+  if (it){ res.out = it.out; res.disp = it.disp; }
+  return res;
+}
+</script>
+
+<script>
+/* =====================================================================
+   Interfaz
+   ===================================================================== */
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
+const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e){} }
+};
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* ---------- Resaltado de sintaxis ---------- */
+const HL_KW = new Set(['int','long','double','float','bool','string','char','auto','const','unsigned','while','do','for','if','else','break','continue','return','true','false','using','namespace','main','void']);
+const HL_IO = new Set(['cout','cin','endl','cerr']);
+const HL_RE = /(\/\/.*$)|(#.*$)|("(?:[^"\\]|\\.)*"?)|('(?:[^'\\]|\\.)*'?)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_]\w*)|([\s\S])/g;
+function hlLine(line){
+  let out = '';
+  line.replace(HL_RE, (all, com, pre, str, chr, num, id) => {
+    if (com) out += '<span class="t-com">' + esc(com) + '</span>';
+    else if (pre) out += '<span class="t-pre">' + esc(pre) + '</span>';
+    else if (str || chr) out += '<span class="t-str">' + esc(str || chr) + '</span>';
+    else if (num) out += '<span class="t-num">' + num + '</span>';
+    else if (id) out += HL_KW.has(id) ? '<span class="t-kw">' + id + '</span>' : HL_IO.has(id) ? '<span class="t-io">' + id + '</span>' : id;
+    else out += esc(all);
+    return all;
+  });
+  return out;
+}
+function renderCode(el, code){
+  el.innerHTML = code.split('\n').map((l, i) => '<div class="ln" data-l="' + (i + 1) + '"><span class="lnum">' + (i + 1) + '</span><span class="lc">' + (hlLine(l) || ' ') + '</span></div>').join('');
+}
+function markLine(el, n, cls){
+  $$('.ln', el).forEach(d => d.classList.remove('cur', 'no', 'err'));
+  if (n){ const d = el.querySelector('.ln[data-l="' + n + '"]'); if (d) d.classList.add(cls || 'cur'); }
+}
+function renderConsole(el, disp, extraErr){
+  let html = (disp || []).map(d => d.t === 'in' ? '<span class="echo">' + esc(d.s) + '</span>' : esc(d.s)).join('');
+  if (extraErr) html += (html && !html.endsWith('\n') ? '\n' : '') + '<span class="errtxt">' + esc(extraErr) + '</span>';
+  el.innerHTML = html || '<span class="muted">(sin salida todavía)</span>';
+  el.scrollTop = el.scrollHeight;
+}
+
+/* ---------- Editor ---------- */
+function makeEditor(root, opts){
+  opts = opts || {};
+  root.classList.add('editor');
+  root.innerHTML = '<div class="ed-gutter" aria-hidden="true"></div><div class="ed-main"><pre class="ed-view" aria-hidden="true"></pre><textarea class="ed-input" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" aria-label="Editor de código C++. Presiona Escape y luego Tab para salir del editor."></textarea></div>';
+  const g = $('.ed-gutter', root), v = $('.ed-view', root), ta = $('.ed-input', root);
+  ta.setAttribute('autocorrect', 'off');
+  let hl = {line:null, cls:'cur'};
+  let escTab = false;
+  function paint(){
+    const lines = ta.value.split('\n');
+    v.innerHTML = lines.map((l, i) => '<div class="ln' + (hl.line === i + 1 ? ' ' + hl.cls : '') + '">' + (hlLine(l) || ' ') + '</div>').join('');
+    g.innerHTML = lines.map((_, i) => '<div class="gn' + (hl.line === i + 1 ? ' ' + hl.cls : '') + '">' + (i + 1) + '</div>').join('');
+    sync();
+  }
+  function sync(){ v.scrollTop = ta.scrollTop; v.scrollLeft = ta.scrollLeft; g.scrollTop = ta.scrollTop; }
+  function insert(t){
+    ta.focus();
+    let ok = false;
+    try { ok = document.execCommand('insertText', false, t); } catch (e){ ok = false; }
+    if (!ok){ ta.setRangeText(t, ta.selectionStart, ta.selectionEnd, 'end'); ta.dispatchEvent(new Event('input')); }
+  }
+  ta.addEventListener('scroll', sync);
+  ta.addEventListener('input', () => { hl.line = null; paint(); if (opts.onChange) opts.onChange(); });
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Escape'){ escTab = true; return; }
+    if (e.key === 'Tab'){
+      if (escTab || e.shiftKey){ escTab = false; return; }
+      e.preventDefault(); insert('    '); return;
+    }
+    escTab = false;
+    if (e.key === 'Enter' && !e.isComposing){
+      const s = ta.selectionStart, before = ta.value.slice(0, s);
+      const ls = before.lastIndexOf('\n') + 1;
+      const indent = before.slice(ls).match(/^[ \t]*/)[0];
+      const extra = /\{\s*$/.test(before) ? '    ' : '';
+      e.preventDefault(); insert('\n' + indent + extra);
+    } else if (e.key === '}'){
+      const s = ta.selectionStart, before = ta.value.slice(0, s);
+      const cur = before.slice(before.lastIndexOf('\n') + 1);
+      if (/^ {4,}$/.test(cur) && ta.selectionEnd === s){ e.preventDefault(); ta.setSelectionRange(s - 4, s); insert('}'); }
+    }
+  });
+  function scrollToLine(n){
+    if (!n) return;
+    const lh = parseFloat(getComputedStyle(ta).lineHeight) || 25;
+    const top = (n - 1) * lh;
+    if (top < ta.scrollTop || top > ta.scrollTop + ta.clientHeight - lh * 2.5) ta.scrollTop = Math.max(0, top - ta.clientHeight / 3);
+    sync();
+  }
+  paint();
+  return {
+    get: () => ta.value,
+    set(code){ ta.value = code; hl.line = null; paint(); ta.scrollTop = 0; sync(); },
+    highlight(line, cls){ hl = {line, cls:cls || 'cur'}; paint(); scrollToLine(line); },
+    clear(){ hl.line = null; paint(); },
+    refresh: paint
+  };
+}
+
+/* ---------- Pestañas ---------- */
+const TABS = ['como', 'versus', 'paso', 'preguntas', 'practica'];
+function showTab(id, focus){
+  if (!TABS.includes(id)) id = 'como';
+  $$('.tab').forEach(b => { const on = b.dataset.tab === id; b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
+  $$('.panel').forEach(p => { p.hidden = p.id !== 'tab-' + id; });
+  try { history.replaceState(null, '', '#' + id); } catch (e){}
+  window.scrollTo(0, 0);
+  if (id === 'paso') edPaso.refresh();
+  if (id === 'practica') edPrac.refresh();
+}
+$$('.tab').forEach(b => {
+  b.addEventListener('click', () => showTab(b.dataset.tab));
+  b.addEventListener('keydown', e => {
+    const i = TABS.indexOf(b.dataset.tab);
+    if (e.key === 'ArrowRight'){ e.preventDefault(); showTab(TABS[(i + 1) % TABS.length], true); }
+    if (e.key === 'ArrowLeft'){ e.preventDefault(); showTab(TABS[(i + TABS.length - 1) % TABS.length], true); }
+  });
+});
+
+/* =====================================================================
+   1. Despertador
+   ===================================================================== */
+const ALARM_CODE = `bool dormida = true;
+int sonidos = 0;
+while (dormida) {
+    sonar();
+    sonidos++;
+}
+cout << "Sonó " << sonidos << " veces";`;
+renderCode($('#alarmCode'), ALARM_CODE);
+const alarm = {timer:null, dormida:true, sonidos:0, phase:'idle'};
+function alarmVars(){
+  $('#aDormida').textContent = alarm.dormida ? 'true' : 'false';
+  $('#aSonidos').textContent = alarm.sonidos;
+}
+function flash(el){ el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 450); }
+function alarmTick(){
+  const code = $('#alarmCode'), note = $('#alarmNote');
+  switch (alarm.phase){
+    case 'd1': markLine(code, 1); note.textContent = 'Creamos dormida y empieza en true.'; alarm.phase = 'd2'; break;
+    case 'd2': markLine(code, 2); note.textContent = 'Creamos un contador de sonidos que empieza en 0.'; alarm.phase = 'cond'; break;
+    case 'cond':
+      if (alarm.dormida){ markLine(code, 3); note.textContent = 'Revisamos la condición: dormida es true, así que entramos al ciclo.'; alarm.phase = 'ring'; }
+      else { markLine(code, 3, 'no'); note.textContent = 'Revisamos la condición: dormida es false, así que el ciclo termina.'; alarm.phase = 'end'; }
+      break;
+    case 'ring': {
+      markLine(code, 4);
+      const c = $('#clock'); c.classList.remove('ring'); void c.offsetWidth; if (!reduceMotion) c.classList.add('ring');
+      $('#ringText').textContent = '¡Riiing!';
+      note.textContent = 'Vuelta ' + (alarm.sonidos + 1) + ': el despertador suena.';
+      alarm.phase = 'inc'; break;
+    }
+    case 'inc':
+      alarm.sonidos++; alarmVars(); flash($('#chipSonidos'));
+      markLine(code, 5); $('#ringText').textContent = '';
+      note.textContent = 'sonidos aumenta a ' + alarm.sonidos + '. Volvemos arriba a revisar la condición.';
+      alarm.phase = 'cond'; break;
+    case 'end':
+      markLine(code, 7);
+      $('#alarmOut').textContent = 'Sonó ' + alarm.sonidos + ' veces';
+      note.textContent = 'Nadie sabía cuántas veces iba a sonar. El while solo sabía cuándo parar.';
+      clearInterval(alarm.timer); alarm.timer = null; alarm.phase = 'idle';
+      $('#alarmStart').disabled = false; $('#alarmStart').textContent = 'Volver a encender'; $('#alarmWake').disabled = true;
+      break;
+  }
+}
+$('#alarmStart').addEventListener('click', () => {
+  clearInterval(alarm.timer);
+  alarm.dormida = true; alarm.sonidos = 0; alarm.phase = 'd1'; alarmVars();
+  $('#alarmOut').innerHTML = '<span class="muted">(aquí aparece lo que imprime el programa)</span>';
+  $('#alarmStart').disabled = true; $('#alarmWake').disabled = false;
+  alarmTick(); alarm.timer = setInterval(alarmTick, 850);
+});
+$('#alarmWake').addEventListener('click', () => {
+  alarm.dormida = false; alarmVars(); flash($('#chipDormida'));
+  $('#alarmWake').disabled = true;
+  $('#alarmNote').textContent = 'dormida ahora es false. El ciclo termina recién cuando vuelva a revisar la condición.';
+});
+
+/* =====================================================================
+   1b. Diagrama de flujo
+   ===================================================================== */
+const flow = {frames:[], i:0, timer:null};
+function flowCodeText(N, forget){
+  return `int i = 1;
+while (i <= ${N}) {
+    cout << i << " ";
+    ${forget ? '// (aquí olvidamos el i++)' : 'i++;'}
+}
+// sigue el programa`;
+}
+function flowFrames(N, forget){
+  const F = []; let i = 1, out = '', v = 0, first = true;
+  F.push({node:'start', line:1, i, out, v, note:'Creamos i y le damos el valor 1.'});
+  while (true){
+    const c = i <= N;
+    F.push({node:'cond', edge:first ? 'e-start' : 'e-back', line:2, cls:c ? 'cur' : 'no', i, out, v, note:'¿' + i + ' <= ' + N + '? ' + (c ? 'Sí, entramos al bloque.' : 'No, el ciclo termina.')});
+    first = false;
+    if (!c){ F.push({node:'exit', edge:'e-no', line:6, i, out, v, note:'El ciclo dio ' + v + (v === 1 ? ' vuelta' : ' vueltas') + '. El programa sigue después de la llave }.'}); break; }
+    v++; out += i + ' ';
+    F.push({node:'body', edge:'e-yes', line:3, i, out, v, note:'Vuelta ' + v + ': imprimimos ' + i + '.'});
+    if (!forget){ i++; F.push({node:'body', line:4, i, out, v, note:'i aumenta a ' + i + '. Volvemos a revisar la condición.'}); }
+    else F.push({node:'body', line:4, i, out, v, note:'Sin i++, i sigue valiendo ' + i + '. Volvemos a la condición...'});
+    if (forget && v >= 5){ F.push({node:'cond', edge:'e-back', warn:true, line:2, cls:'err', i, out:out + '...', v, note:'i nunca cambia, así que la condición siempre es verdadera. Esto es un loop infinito: el programa nunca terminaría.'}); break; }
+  }
+  return F;
+}
+function flowBuild(){
+  let N = parseInt($('#fN').value, 10); if (isNaN(N)) N = 3; N = Math.max(1, Math.min(8, N));
+  const forget = $('#fForget').checked;
+  flow.frames = flowFrames(N, forget); flow.i = 0; flowPause();
+  renderCode($('#flowCode'), flowCodeText(N, forget));
+  $('#fCondText').textContent = '¿i <= ' + N + '?';
+  $('#fIncText').textContent = forget ? '(sin i++)' : 'i++;';
+  flowRender();
+}
+function flowRender(){
+  const f = flow.frames[flow.i];
+  ['start', 'cond', 'body', 'exit'].forEach(n => { const g = $('#n-' + n); g.classList.toggle('active', f.node === n); g.classList.toggle('warn', n === 'cond' && !!f.warn); });
+  ['e-start', 'e-yes', 'e-no', 'e-back'].forEach(id => { const p = $('#' + id); const on = f.edge === id; p.classList.toggle('active', on); p.setAttribute('marker-end', on ? 'url(#arrOn)' : 'url(#arr)'); });
+  markLine($('#flowCode'), f.line, f.cls || 'cur');
+  $('#fI').textContent = f.i; $('#fV').textContent = f.v;
+  $('#fOut').innerHTML = f.out ? esc(f.out) : '<span class="muted">(sin salida todavía)</span>';
+  $('#fNote').textContent = f.note;
+  $('#fCount').textContent = 'Paso ' + (flow.i + 1) + ' de ' + flow.frames.length;
+  $('#fPrev').disabled = flow.i === 0;
+  $('#fNext').disabled = flow.i >= flow.frames.length - 1;
+  if (flow.i >= flow.frames.length - 1) flowPause();
+}
+function flowPause(){ clearInterval(flow.timer); flow.timer = null; $('#fPlay').textContent = 'Reproducir'; }
+$('#fNext').addEventListener('click', () => { if (flow.i < flow.frames.length - 1){ flow.i++; flowRender(); } });
+$('#fPrev').addEventListener('click', () => { if (flow.i > 0){ flow.i--; flowRender(); } });
+$('#fReset').addEventListener('click', () => { flowPause(); flow.i = 0; flowRender(); });
+$('#fPlay').addEventListener('click', () => {
+  if (flow.timer){ flowPause(); return; }
+  if (flow.i >= flow.frames.length - 1) flow.i = 0;
+  $('#fPlay').textContent = 'Pausar';
+  flow.timer = setInterval(() => { if (flow.i < flow.frames.length - 1){ flow.i++; flowRender(); } else flowPause(); }, 900);
+});
+$('#fN').addEventListener('input', flowBuild);
+$('#fForget').addEventListener('change', flowBuild);
+flowBuild();
+
+/* =====================================================================
+   2. for vs while
+   ===================================================================== */
+const K = w => '<span class="t-kw">' + w + '</span>';
+const IOs = w => '<span class="t-io">' + w + '</span>';
+const Nn = w => '<span class="t-num">' + w + '</span>';
+const COUT_LINE = IOs('cout') + ' &lt;&lt; i &lt;&lt; ' + IOs('endl') + ';';
+function lnHtml(n, html){ return '<div class="ln"><span class="lnum">' + n + '</span><span class="lc">' + html + '</span></div>'; }
+$('#vsFor').innerHTML =
+  lnHtml(1, K('for') + ' (<span class="pt init">' + K('int') + ' i = ' + Nn(0) + '</span>; <span class="pt cond">i &lt;= ' + Nn(10) + '</span>; <span class="pt upd">i = i + ' + Nn(1) + '</span>) {') +
+  lnHtml(2, '    ' + COUT_LINE) +
+  lnHtml(3, '}');
+const VS_STEPS = [
+  {show:[], cap:'Empezamos con un while vacío. Solo tiene un espacio para la condición.'},
+  {show:['cond', 'body'], neu:'cond', cap:'La condición del for (i <= 10) va dentro de los paréntesis del while. Lo que se repite va entre las llaves.'},
+  {show:['cond', 'body', 'init'], neu:'init', cap:'El inicio (int i = 0) se escribe antes del while, porque pasa una sola vez.'},
+  {show:['cond', 'body', 'init', 'upd'], neu:'upd', cap:'El incremento (i = i + 1) va al final del bloque. Sin esa línea, i nunca cambia y el ciclo no termina.'}
+];
+let vsStep = 0;
+function vsRender(){
+  const st = VS_STEPS[vsStep], has = p => st.show.includes(p), nw = p => st.neu === p ? ' new' : '';
+  const lines = [];
+  if (has('init')) lines.push('<span class="pt init' + nw('init') + '">' + K('int') + ' i = ' + Nn(0) + ';</span>');
+  lines.push(K('while') + ' (' + (has('cond') ? '<span class="pt cond' + nw('cond') + '">i &lt;= ' + Nn(10) + '</span>' : '<span class="slot">&nbsp;</span>') + ') {');
+  if (has('body')) lines.push('    ' + COUT_LINE);
+  if (has('upd')) lines.push('    <span class="pt upd' + nw('upd') + '">i = i + ' + Nn(1) + ';</span>');
+  lines.push('}');
+  $('#vsWhile').innerHTML = lines.map((h, i) => lnHtml(i + 1, h)).join('');
+  $('#vsCap').textContent = st.cap;
+  $('#vsCount').textContent = 'Paso ' + (vsStep + 1) + ' de ' + VS_STEPS.length;
+  $('#vsPrev').disabled = vsStep === 0; $('#vsNext').disabled = vsStep === VS_STEPS.length - 1;
+}
+$('#vsNext').addEventListener('click', () => { if (vsStep < VS_STEPS.length - 1){ vsStep++; vsRender(); } });
+$('#vsPrev').addEventListener('click', () => { if (vsStep > 0){ vsStep--; vsRender(); } });
+vsRender();
+
+const SORT = [
+  {s:'Imprimir los números del 1 al 100', a:'for', why:'Sabes exactamente cuántas vueltas son: 100.'},
+  {s:'Pedir la contraseña hasta que sea correcta', a:'while', why:'No sabes cuántos intentos va a necesitar. Repites hasta que acierte.'},
+  {s:'Sumar las notas de 5 pruebas', a:'for', why:'Son exactamente 5 notas.'},
+  {s:'Leer números hasta que llegue un 0', a:'while', why:'No sabes cuántos números vendrán antes del 0.'},
+  {s:'Contar cuántos dígitos tiene un número', a:'while', why:'Divides por 10 mientras el número sea mayor que 0; las vueltas dependen del número.'},
+  {s:'Saludar N veces, con N leído al comienzo', a:'for', why:'Aunque N lo escribe la usuaria, antes de empezar ya sabes que son N vueltas.'},
+  {s:'Jugar hasta que la jugadora se quede sin vidas', a:'while', why:'Depende de cómo juegue: repites mientras tenga vidas.'}
+];
+const sortAns = {};
+function sortRender(){
+  $('#sortList').innerHTML = SORT.map((it, i) => {
+    const a = sortAns[i]; const cls = a ? (a === it.a ? ' right' : ' wrong') : '';
+    const why = a ? (a === it.a ? 'Correcto. ' : 'Mejor un ' + it.a + '. ') + it.why : '';
+    return '<div class="sort-item' + cls + '"><span>' + esc(it.s) + '</span><div class="seg" role="group" aria-label="Elegir ciclo">' +
+      ['for', 'while'].map(o => '<button data-i="' + i + '" data-o="' + o + '" aria-pressed="' + (a === o) + '">' + o + '</button>').join('') +
+      '</div><p class="why">' + esc(why) + '</p></div>';
+  }).join('');
+  const done = Object.keys(sortAns).length, ok = SORT.filter((it, i) => sortAns[i] === it.a).length;
+  $('#sortScore').textContent = done ? ok + ' de ' + SORT.length + ' correctas' + (done < SORT.length ? ' (faltan ' + (SORT.length - done) + ')' : '') : '';
+}
+$('#sortList').addEventListener('click', e => { const b = e.target.closest('button[data-i]'); if (!b) return; sortAns[b.dataset.i] = b.dataset.o; sortRender(); });
+sortRender();
+
+function dwCodes(x){
+  return {
+    w: `int x = ${x};
+while (x < 3) {
+    cout << x << " ";
+    x++;
+}`,
+    d: `int x = ${x};
+do {
+    cout << x << " ";
+    x++;
+} while (x < 3);`
+  };
+}
+function dwRender(){
+  const x = parseInt($('#dwX').value, 10); $('#dwXv').textContent = x;
+  const c = dwCodes(x);
+  renderCode($('#dwWhileCode'), c.w); renderCode($('#dwDoCode'), c.d);
+  const rw = runProgram(c.w, ''), rd = runProgram(c.d, '');
+  const nw = inputTokens(rw.out).length, nd = inputTokens(rd.out).length;
+  $('#dwWhileOut').innerHTML = rw.out ? esc(rw.out) : '<span class="muted">(no imprime nada)</span>';
+  $('#dwDoOut').innerHTML = rd.out ? esc(rd.out) : '<span class="muted">(no imprime nada)</span>';
+  $('#dwWhileN').textContent = nw; $('#dwDoN').textContent = nd;
+  $('#dwNote').textContent = x >= 3
+    ? 'Con x = ' + x + ', la condición x < 3 es falsa desde el principio. El while ni siquiera entra, pero el do-while ya ejecutó su bloque una vez antes de preguntar.'
+    : 'Con x = ' + x + ', la condición se cumple al comienzo, así que los dos ciclos hacen lo mismo. Prueba con x = 3 o más.';
+}
+$('#dwX').addEventListener('input', dwRender);
+dwRender();
+
+let bcMode = 'continue';
+function bcRender(){
+  const cond = $('#bcCond').value;
+  const code = `int i = 0;
+while (i < 10) {
+    i++;
+    if (${cond}) {
+        ${bcMode};
+    }
+    cout << i << " ";
+}`;
+  renderCode($('#bcCode'), code);
+  const test = {'i % 3 == 0':i => i % 3 === 0, 'i == 5':i => i === 5, 'i % 2 == 0':i => i % 2 === 0, 'i > 7':i => i > 7}[cond];
+  const tiles = []; let stopped = false; const printed = [];
+  for (let i = 1; i <= 10; i++){
+    if (stopped){ tiles.push({i, c:'never'}); continue; }
+    if (test(i)){ if (bcMode === 'break'){ tiles.push({i, c:'stopped'}); stopped = true; } else tiles.push({i, c:'skipped'}); }
+    else { tiles.push({i, c:'printed'}); printed.push(i); }
+  }
+  $('#bcTiles').innerHTML = tiles.map(t => '<span class="tile ' + t.c + '">' + t.i + '</span>').join('');
+  const stopAt = tiles.find(t => t.c === 'stopped');
+  $('#bcNote').textContent = 'Imprime: ' + (printed.join(' ') || '(nada)') + '. ' + (bcMode === 'break'
+    ? (stopAt ? 'Cuando i vale ' + stopAt.i + ', break sale del while y los números que faltaban nunca se revisan.' : 'La condición nunca se cumplió, así que break nunca se ejecutó.')
+    : 'Cada vez que la condición se cumple, continue salta el cout y el ciclo sigue con el siguiente número.');
+  $('#bcBreak').setAttribute('aria-pressed', bcMode === 'break'); $('#bcCont').setAttribute('aria-pressed', bcMode === 'continue');
+}
+$('#bcBreak').addEventListener('click', () => { bcMode = 'break'; bcRender(); });
+$('#bcCont').addEventListener('click', () => { bcMode = 'continue'; bcRender(); });
+$('#bcCond').addEventListener('change', bcRender);
+bcRender();
+
+/* =====================================================================
+   3. Paso a paso
+   ===================================================================== */
+const HEAD = '#include <iostream>\nusing namespace std;\n\nint main() {\n';
+const TAIL = '    return 0;\n}';
+const wrapMain = body => HEAD + body + TAIL;
+const PRESETS = [
+  {t:'Contar del 1 al 5', input:'', d:'El ejemplo más simple: un contador que avanza hasta que la condición deja de cumplirse.',
+   c:wrapMain(`    int i = 1;
+    while (i <= 5) {
+        cout << i << " ";
+        i++;
+    }
+    cout << endl << "Listo!" << endl;
+`)},
+  {t:'Pedir contraseña', input:'1111 4321 1234', d:'Sigue pidiendo mientras la clave no sea 1234. Cambia la entrada para probar más o menos intentos.',
+   c:wrapMain(`    int clave;
+    cout << "Contraseña: ";
+    cin >> clave;
+    while (clave != 1234) {
+        cout << "Incorrecta" << endl;
+        cout << "Contraseña: ";
+        cin >> clave;
+    }
+    cout << "Acceso concedido!" << endl;
+`)},
+  {t:'Adivina el número', input:'3 9 7', d:'El número secreto es 7. El programa cuenta cuántos intentos necesitaste.',
+   c:wrapMain(`    int secreto = 7;
+    int numero;
+    int intentos = 0;
+    cout << "Adivina (1 - 10): ";
+    cin >> numero;
+    intentos++;
+    while (numero != secreto) {
+        cout << "Nope! Intenta: ";
+        cin >> numero;
+        intentos++;
+    }
+    cout << "Adivinaste en " << intentos << " intentos" << endl;
+`)},
+  {t:'Sumar hasta que llegue un 0', input:'5 8 2 0', d:'Lee números y los acumula. El 0 es la señal para parar.',
+   c:wrapMain(`    int numero, suma = 0;
+    cin >> numero;
+    while (numero != 0) {
+        suma += numero;
+        cin >> numero;
+    }
+    cout << "Suma: " << suma << endl;
+`)},
+  {t:'Contar los dígitos de un número', input:'45872', d:'Dividir por 10 borra el último dígito. Repetimos mientras quede algo.',
+   c:wrapMain(`    int n, digitos = 0;
+    cin >> n;
+    while (n > 0) {
+        n = n / 10;
+        digitos++;
+    }
+    cout << "Tiene " << digitos << " dígitos" << endl;
+`)},
+  {t:'do-while: elegir un número válido', input:'15 -2 7', d:'Primero pregunta y después revisa. Si el número está fuera del rango, vuelve a preguntar.',
+   c:wrapMain(`    int opcion;
+    do {
+        cout << "Elige un número del 1 al 10: ";
+        cin >> opcion;
+    } while (opcion < 1 || opcion > 10);
+    cout << "Elegiste " << opcion << endl;
+`)},
+  {t:'break y continue', input:'', d:'Salta los múltiplos de 3. Cambia continue por break y compara qué pasa.',
+   c:wrapMain(`    int i = 0;
+    while (i < 10) {
+        i++;
+        if (i % 3 == 0) {
+            continue;   // prueba cambiarlo por break
+        }
+        cout << i << " ";
+    }
+`)},
+  {t:'Loop infinito (olvidé el i++)', input:'', d:'Nada cambia dentro del while. Presiona Ejecutar para ver cómo lo detectamos, y luego arréglalo.',
+   c:wrapMain(`    int i = 1;
+    while (i <= 5) {
+        cout << i << " ";
+        // aquí falta algo...
+    }
+`)},
+  {t:'Leer hasta que se acaben los datos', input:'4 8 15 16 23 42', d:'while (cin >> x) se repite mientras haya datos para leer. Es la misma idea que leer un archivo palabra por palabra.',
+   c:wrapMain(`    int x, suma = 0, cantidad = 0;
+    while (cin >> x) {
+        suma += x;
+        cantidad++;
+    }
+    cout << "Leí " << cantidad << " números" << endl;
+    cout << "Suma: " << suma << endl;
+`)}
+];
+const edPaso = makeEditor($('#pasoEditor'), {onChange:() => stopTrace()});
+const pasoInput = $('#pasoInput');
+pasoInput.addEventListener('input', () => stopTrace());
+$('#presetSel').innerHTML = PRESETS.map((p, i) => '<option value="' + i + '">' + esc(p.t) + '</option>').join('') + '<option value="custom" hidden>Código propio</option>';
+function loadPreset(i){
+  const p = PRESETS[i]; edPaso.set(p.c); pasoInput.value = p.input; $('#presetDesc').textContent = p.d; stopTrace(true);
+}
+$('#presetSel').addEventListener('change', e => { if (e.target.value !== 'custom') loadPreset(+e.target.value); });
+
+const T = {frames:[], i:-1, timer:null};
+function setStepButtons(){
+  const has = T.frames.length > 0;
+  $('#prevBtn').disabled = !has || T.i <= 0;
+  $('#nextBtn').disabled = !has || T.i >= T.frames.length - 1;
+  $('#endBtn').disabled = !has || T.i >= T.frames.length - 1;
+  $('#playBtn').disabled = !has || (T.i >= T.frames.length - 1 && !T.timer);
+}
+function stopTrace(keepNote){
+  pausePlay(); T.frames = []; T.i = -1; edPaso.clear();
+  $('#stepInfo').textContent = '';
+  $('#loopBadge').textContent = 'Fuera de ciclos'; $('#loopBadge').className = 'loop-badge off';
+  if (!keepNote) $('#pasoNote').textContent = 'Presiona Paso a paso para empezar.';
+  else $('#pasoNote').textContent = 'Presiona Paso a paso para empezar.';
+  setStepButtons();
+}
+function renderVars(el, vars, prev){
+  if (!vars || !vars.length){ el.innerHTML = '<p class="vars-empty">Todavía no hay variables.</p>'; return; }
+  const pm = new Map((prev || []).map(v => [v.name, v.value]));
+  el.innerHTML = '<div class="table-wrap"><table class="vars"><thead><tr><th>Variable</th><th>Tipo</th><th>Valor</th></tr></thead><tbody>' +
+    vars.map(v => '<tr class="' + (prev && pm.get(v.name) !== v.value ? 'changed' : '') + '"><td>' + esc(v.name) + '</td><td>' + esc(v.type) + '</td><td>' + esc(v.value) + '</td></tr>').join('') +
+    '</tbody></table></div>';
+}
+function renderFrame(){
+  const f = T.frames[T.i]; if (!f) return;
+  const cls = f.error ? 'err' : f.cond === false ? 'no' : 'cur';
+  if (f.line) edPaso.highlight(f.line, cls); else edPaso.clear();
+  renderVars($('#pasoVars'), f.vars, T.i > 0 ? T.frames[T.i - 1].vars : null);
+  renderConsole($('#pasoOut'), f.disp, f.error ? 'Error' + (f.line ? ' en la línea ' + f.line : '') + ': ' + f.note : null);
+  $('#pasoNote').textContent = f.error ? (f.line ? 'Línea ' + f.line + ': ' : '') + f.note : f.line ? 'Línea ' + f.line + ': ' + f.note : f.note;
+  const lb = $('#loopBadge');
+  if (f.loop){ lb.className = 'loop-badge'; lb.textContent = 'Dentro del ' + f.loop.kind + ' de la línea ' + f.loop.line + ', vuelta ' + Math.max(f.loop.iter, 1); }
+  else { lb.className = 'loop-badge off'; lb.textContent = 'Fuera de ciclos'; }
+  $('#stepInfo').textContent = 'Paso ' + (T.i + 1) + ' de ' + T.frames.length + (T.truncNote ? '. ' + T.truncNote : '');
+  setStepButtons();
+}
+function startTrace(){
+  pausePlay();
+  const src = edPaso.get(), input = pasoInput.value;
+  const r = runProgram(src, input, {trace:true, maxFrames:2500});
+  const frames = r.frames; T.truncNote = '';
+  const lastVars = frames.length ? frames[frames.length - 1].vars : [];
+  if (r.error){
+    frames.push({line:r.error.line, error:true, note:r.error.msg, vars:lastVars, disp:r.disp, loop:null});
+  } else if (r.truncated){
+    const fast = runProgram(src, input);
+    if (fast.error) frames.push({line:fast.error.line, error:true, note:fast.error.msg, vars:lastVars, disp:frames[frames.length - 1].disp, loop:null});
+    else T.truncNote = 'Se muestran solo los primeros 2500 pasos; usa Ejecutar para ver el resultado completo';
+  }
+  T.frames = frames; T.i = 0; renderFrame();
+}
+function pausePlay(){ clearInterval(T.timer); T.timer = null; $('#playBtn').textContent = 'Reproducir'; }
+function stepTo(i){ T.i = Math.max(0, Math.min(T.frames.length - 1, i)); renderFrame(); if (T.i >= T.frames.length - 1) pausePlay(); }
+$('#traceBtn').addEventListener('click', startTrace);
+$('#nextBtn').addEventListener('click', () => stepTo(T.i + 1));
+$('#prevBtn').addEventListener('click', () => { pausePlay(); stepTo(T.i - 1); });
+$('#endBtn').addEventListener('click', () => { pausePlay(); stepTo(T.frames.length - 1); });
+$('#playBtn').addEventListener('click', () => {
+  if (T.timer){ pausePlay(); setStepButtons(); return; }
+  if (!T.frames.length) return;
+  $('#playBtn').textContent = 'Pausar';
+  T.timer = setInterval(() => { if (T.i < T.frames.length - 1) stepTo(T.i + 1); else { pausePlay(); setStepButtons(); } }, +$('#speedSel').value);
+  setStepButtons();
+});
+$('#speedSel').addEventListener('change', () => { if (T.timer){ pausePlay(); $('#playBtn').click(); } });
+$('#runBtn').addEventListener('click', () => {
+  stopTrace();
+  const r = runProgram(edPaso.get(), pasoInput.value);
+  renderConsole($('#pasoOut'), r.disp, r.error ? 'Error' + (r.error.line ? ' en la línea ' + r.error.line : '') + ': ' + r.error.msg : null);
+  if (r.error){ if (r.error.line) edPaso.highlight(r.error.line, 'err'); $('#pasoNote').textContent = r.error.msg; }
+  else $('#pasoNote').textContent = 'El programa terminó. Usa Paso a paso para ver cómo llegó a este resultado.';
+  $('#pasoVars').innerHTML = '<p class="vars-empty">Las variables se muestran en el modo Paso a paso.</p>';
+});
+document.addEventListener('keydown', e => {
+  if ($('#tab-paso').hidden || !T.frames.length) return;
+  const tag = (document.activeElement && document.activeElement.tagName) || '';
+  if (tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT') return;
+  if (e.key === 'ArrowRight'){ e.preventDefault(); stepTo(T.i + 1); }
+  if (e.key === 'ArrowLeft'){ e.preventDefault(); pausePlay(); stepTo(T.i - 1); }
+});
+function openInPaso(code, input, desc){
+  edPaso.set(code); pasoInput.value = input || '';
+  $('#presetSel').value = 'custom'; $('#presetDesc').textContent = desc || 'Código enviado desde otra sección. Puedes editarlo.';
+  showTab('paso'); stopTrace(); startTrace();
+}
+loadPreset(0);
+
+/* =====================================================================
+   4. Preguntas
+   ===================================================================== */
+const QUIZ = [
+  {q:'¿Cuándo conviene más usar while en vez de for?', o:['Cuando sabes exactamente cuántas veces vas a repetir', 'Cuando repites hasta que pase algo, sin saber cuántas veces será', 'Cuando el código tiene un if adentro', 'Nunca: for y while no se pueden intercambiar'], a:1,
+   e:'while solo necesita saber cuándo parar. Si ya sabes cuántas vueltas son (5, 10, N), un for suele quedar más claro.'},
+  {q:'¿Cuántas veces se imprime Hola?', c:`int i = 0;
+while (i < 4) {
+    cout << "Hola ";
+    i++;
+}`, o:['3', '4', '5', 'Infinitas'], a:1, e:'i toma los valores 0, 1, 2 y 3. Cuando llega a 4, la condición i < 4 es falsa y el ciclo termina.'},
+  {q:'¿Qué imprime este código?', c:`int n = 10;
+while (n > 0) {
+    cout << n << " ";
+    n = n - 3;
+}`, o:['10 7 4 1', '10 7 4 1 -2', '10 7 4', '7 4 1'], a:0, e:'Después de imprimir 1, n pasa a -2. La condición n > 0 ya no se cumple, así que -2 nunca se imprime.'},
+  {q:'¿Qué pasa con este código?', c:`int i = 1;
+while (i <= 5) {
+    cout << i;
+}`, o:['Imprime 12345', 'Imprime 1 una sola vez', 'Imprime 1 para siempre: es un loop infinito', 'Da error de compilación'], a:2,
+   e:'Dentro del while nada cambia a i, así que i <= 5 siempre es verdadero. Regla de oro: algo tiene que cambiar dentro del ciclo.'},
+  {q:'¿Cuántas veces se imprime A?', c:`int x = 10;
+while (x < 5) {
+    cout << "A";
+    x++;
+}`, o:['0', '1', '5', 'Infinitas'], a:0, e:'El while revisa la condición antes de entrar. Como 10 < 5 es falso desde el principio, nunca entra.'},
+  {q:'¿Y ahora, con do-while?', c:`int x = 10;
+do {
+    cout << "A";
+    x++;
+} while (x < 5);`, o:['0', '1', '5', 'Infinitas'], a:1, e:'do-while ejecuta el bloque primero y revisa después. Por eso siempre corre al menos una vez.'},
+  {q:'¿Qué imprime este código?', c:`int i = 1;
+while (true) {
+    if (i == 4) {
+        break;
+    }
+    cout << i;
+    i++;
+}`, o:['123', '1234', 'Nada', 'Es un loop infinito'], a:0, e:'while (true) se repetiría para siempre, pero cuando i llega a 4 el break sale del ciclo antes de imprimir.'},
+  {q:'¿Qué imprime este código?', c:`int i = 0;
+while (i < 5) {
+    i++;
+    if (i == 3) {
+        continue;
+    }
+    cout << i;
+}`, o:['12345', '1245', '12', '1234'], a:1, e:'Cuando i vale 3, continue salta el cout y vuelve a la condición. Como el i++ está al comienzo, el ciclo sigue avanzando.'},
+  {q:'¿Qué va en el espacio para que siga pidiendo la clave mientras esté mala?', c:`int clave;
+cin >> clave;
+while (clave ___ 1234) {
+    cout << "Incorrecta" << endl;
+    cin >> clave;
+}
+cout << "Acceso concedido!";`, o:['==', '!=', '<', '>='], a:1,
+   e:'Queremos repetir mientras la clave sea distinta de 1234. En cuanto sea igual, la condición se vuelve falsa y el ciclo termina.',
+   tryCode:`int clave;
+cin >> clave;
+while (clave != 1234) {
+    cout << "Incorrecta" << endl;
+    cin >> clave;
+}
+cout << "Acceso concedido!";`, tryInput:'5 99 1234'},
+  {q:'¿Qué imprime este código?', c:`int n = 123, s = 0;
+while (n > 0) {
+    s += n % 10;
+    n = n / 10;
+}
+cout << s;`, o:['123', '6', '3', '0'], a:1, e:'n % 10 saca el último dígito (3, luego 2, luego 1) y n / 10 lo borra. La suma es 3 + 2 + 1 = 6.'}
+];
+const Q = {i:0, score:0, answered:false};
+function quizRender(){
+  const el = $('#quiz');
+  if (Q.i >= QUIZ.length){
+    const msg = Q.score === QUIZ.length ? '¡Perfecto! Dominas el while.' : Q.score >= QUIZ.length * 0.7 ? 'Muy bien. Revisa las que fallaste en Paso a paso.' : 'Vas bien. Vuelve a Cómo funciona o prueba los ejemplos en Paso a paso, y luego inténtalo otra vez.';
+    el.innerHTML = '<h2>Terminaste</h2><p class="score-big">' + Q.score + ' / ' + QUIZ.length + '</p><p class="lead" style="margin-top:14px">' + msg + '</p><button class="btn primary" id="qRestart">Responder de nuevo</button>';
+    $('#qRestart').addEventListener('click', () => { Q.i = 0; Q.score = 0; Q.answered = false; quizRender(); });
+    return;
+  }
+  const it = QUIZ[Q.i];
+  el.innerHTML =
+    '<div class="quiz-top"><span>Pregunta ' + (Q.i + 1) + ' de ' + QUIZ.length + '</span><span>Correctas: ' + Q.score + '</span></div>' +
+    '<div class="progress"><div style="width:' + (Q.i / QUIZ.length * 100) + '%"></div></div>' +
+    '<h3>' + esc(it.q) + '</h3>' + (it.c ? '<pre class="code-block" id="qCode"></pre>' : '') +
+    '<div class="options">' + it.o.map((o, i) => '<button class="opt" data-i="' + i + '"><span class="k">' + 'ABCD'[i] + '</span><span' + (it.c ? ' class="mono"' : '') + '>' + esc(o) + '</span></button>').join('') + '</div>' +
+    '<div id="qFb"></div>';
+  if (it.c) renderCode($('#qCode'), it.c);
+  $$('.opt', el).forEach(b => b.addEventListener('click', () => quizAnswer(+b.dataset.i)));
+}
+function quizAnswer(i){
+  if (Q.answered) return; Q.answered = true;
+  const it = QUIZ[Q.i], ok = i === it.a; if (ok) Q.score++;
+  $$('.opt').forEach(b => { const j = +b.dataset.i; b.disabled = true; if (j === it.a) b.classList.add('right'); else if (j === i) b.classList.add('wrong'); });
+  const tryCode = it.tryCode || it.c;
+  $('#qFb').innerHTML = '<div class="feedback ' + (ok ? 'good' : 'bad') + '"><strong>' + (ok ? '¡Correcto!' : 'No era esa. La respuesta es ' + 'ABCD'[it.a] + '.') + '</strong>' + esc(it.e) + '</div>' +
+    '<div class="btn-row"><button class="btn primary" id="qNext">' + (Q.i === QUIZ.length - 1 ? 'Ver resultado' : 'Siguiente pregunta') + '</button>' +
+    (tryCode ? '<button class="btn" id="qTry">Verlo en Paso a paso</button>' : '') + '</div>';
+  $('.quiz-top span:last-child').textContent = 'Correctas: ' + Q.score;
+  $('#qNext').addEventListener('click', () => { Q.i++; Q.answered = false; quizRender(); $('#quiz').scrollIntoView({block:'start'}); });
+  if (tryCode) $('#qTry').addEventListener('click', () => openInPaso(tryCode, it.tryInput || '', 'Código de la pregunta ' + (Q.i + 1) + '. Vuelve a la pestaña Preguntas para continuar.'));
+  $('#qNext').focus();
+}
+quizRender();
+
+/* =====================================================================
+   5. Práctica
+   ===================================================================== */
+const CH = [
+  {id:'clave', t:'La contraseña', d:'Fácil',
+   text:'<p>Lee claves (números enteros) hasta que llegue la correcta, <code>1234</code>. Por cada clave incorrecta imprime <code>Incorrecta</code>. Cuando llegue la correcta, imprime <code>Acceso concedido!</code></p><p>Solo tienes que completar la condición del while.</p>',
+   start:wrapMain(`    int clave;
+    cin >> clave;
+    while (clave != ____) {
+        cout << "Incorrecta" << endl;
+        cin >> clave;
+    }
+    cout << "Acceso concedido!" << endl;
+`),
+   sol:wrapMain(`    int clave;
+    cin >> clave;
+    while (clave != 1234) {
+        cout << "Incorrecta" << endl;
+        cin >> clave;
+    }
+    cout << "Acceso concedido!" << endl;
+`),
+   hints:['Reemplaza los guiones ____ por el número de la clave correcta.', 'La condición se lee así: "mientras la clave sea distinta de 1234".'],
+   tests:[{i:'1234', o:'Acceso concedido!'}, {i:'1 22 1234', o:'Incorrecta\nIncorrecta\nAcceso concedido!'}, {i:'4321 1233 1235 1234', o:'Incorrecta\nIncorrecta\nIncorrecta\nAcceso concedido!'}]},
+  {id:'despegue', t:'Cuenta regresiva', d:'Fácil',
+   text:'<p>Lee un número <code>N</code> y usa un <b>while</b> para imprimir desde N hasta 1, separados por espacio. Al final imprime <code>Despegue!</code></p>',
+   start:wrapMain(`    int n;
+    cin >> n;
+    // escribe tu while aquí
+
+    cout << "Despegue!" << endl;
+`),
+   sol:wrapMain(`    int n;
+    cin >> n;
+    while (n >= 1) {
+        cout << n << " ";
+        n--;
+    }
+    cout << "Despegue!" << endl;
+`),
+   hints:['La condición puede ser: mientras n sea mayor o igual a 1.', 'Dentro del ciclo, imprime n y después réstale 1 con n--. Si no lo restas, tienes un loop infinito.'],
+   tests:[{i:'5', o:'5 4 3 2 1 Despegue!'}, {i:'1', o:'1 Despegue!'}, {i:'10', o:'10 9 8 7 6 5 4 3 2 1 Despegue!'}]},
+  {id:'suma0', t:'Sumar hasta el cero', d:'Fácil',
+   text:'<p>Lee números enteros uno por uno hasta que llegue un <code>0</code>. Imprime la suma de todos los números leídos (el 0 no cambia la suma).</p>',
+   start:wrapMain(`    int numero, suma = 0;
+    cin >> numero;
+    // mientras el número no sea 0...
+
+    cout << suma << endl;
+`),
+   sol:wrapMain(`    int numero, suma = 0;
+    cin >> numero;
+    while (numero != 0) {
+        suma += numero;
+        cin >> numero;
+    }
+    cout << suma << endl;
+`),
+   hints:['La condición es numero != 0.', 'Dentro del ciclo haz dos cosas: suma el número al acumulador y lee el siguiente número con cin.'],
+   tests:[{i:'5 8 2 0', o:'15'}, {i:'0', o:'0'}, {i:'-3 10 0', o:'7'}, {i:'100 200 300 400 0', o:'1000'}]},
+  {id:'digitos', t:'¿Cuántos dígitos?', d:'Medio',
+   text:'<p>Lee un número entero positivo <code>N</code> e imprime cuántos dígitos tiene.</p>',
+   start:wrapMain(`    int n, digitos = 0;
+    cin >> n;
+
+    cout << digitos << endl;
+`),
+   sol:wrapMain(`    int n, digitos = 0;
+    cin >> n;
+    while (n > 0) {
+        n = n / 10;
+        digitos++;
+    }
+    cout << digitos << endl;
+`),
+   hints:['Con enteros, n / 10 borra el último dígito: 4587 / 10 = 458.', 'Repite mientras n sea mayor que 0 y cuenta cada vuelta con un contador.'],
+   tests:[{i:'7', o:'1'}, {i:'45872', o:'5'}, {i:'1000', o:'4'}, {i:'99', o:'2'}]},
+  {id:'adivina', t:'Adivina el número', d:'Medio',
+   text:'<p>El número secreto es <code>7</code>. Lee intentos hasta que la persona acierte. Por cada intento fallido imprime <code>Mayor</code> si el secreto es mayor que el intento, o <code>Menor</code> si es menor. Al acertar imprime <code>Adivinaste en X intentos</code>, donde X cuenta todos los intentos (incluido el correcto).</p>',
+   start:wrapMain(`    int secreto = 7, numero, intentos = 1;
+    cin >> numero;
+
+    cout << "Adivinaste en " << intentos << " intentos" << endl;
+`),
+   sol:wrapMain(`    int secreto = 7, numero, intentos = 1;
+    cin >> numero;
+    while (numero != secreto) {
+        if (secreto > numero) {
+            cout << "Mayor" << endl;
+        } else {
+            cout << "Menor" << endl;
+        }
+        cin >> numero;
+        intentos++;
+    }
+    cout << "Adivinaste en " << intentos << " intentos" << endl;
+`),
+   hints:['El while se repite mientras numero sea distinto de secreto.', 'Dentro: un if/else para decidir entre Mayor y Menor, después lee el siguiente intento y suma 1 a intentos.'],
+   tests:[{i:'3 9 7', o:'Mayor\nMenor\nAdivinaste en 3 intentos'}, {i:'7', o:'Adivinaste en 1 intentos'}, {i:'1 2 3 8 7', o:'Mayor\nMayor\nMayor\nMenor\nAdivinaste en 5 intentos'}]},
+  {id:'pot2', t:'Potencias de 2', d:'Medio',
+   text:'<p>Lee un número <code>N</code> e imprime, separadas por espacio, todas las potencias de 2 que sean menores o iguales a N: 1, 2, 4, 8, 16...</p>',
+   start:wrapMain(`    int n;
+    cin >> n;
+    int p = 1;
+
+`),
+   sol:wrapMain(`    int n;
+    cin >> n;
+    int p = 1;
+    while (p <= n) {
+        cout << p << " ";
+        p = p * 2;
+    }
+`),
+   hints:['No sabes cuántas potencias habrá: por eso usamos while.', 'Repite mientras p <= n. En cada vuelta imprime p y luego duplícalo: p = p * 2.'],
+   tests:[{i:'10', o:'1 2 4 8'}, {i:'1', o:'1'}, {i:'100', o:'1 2 4 8 16 32 64'}, {i:'64', o:'1 2 4 8 16 32 64'}]},
+  {id:'rango', t:'Número en rango (do-while)', d:'Medio',
+   text:'<p>Lee números hasta que llegue uno entre 1 y 10 (incluidos). Por cada número fuera de ese rango imprime <code>Fuera de rango</code>. Al final imprime <code>Elegiste X</code>. Intenta resolverlo con <b>do-while</b>.</p>',
+   start:wrapMain(`    int x;
+    do {
+
+    } while (/* condición */ false);
+    cout << "Elegiste " << x << endl;
+`),
+   sol:wrapMain(`    int x;
+    do {
+        cin >> x;
+        if (x < 1 || x > 10) {
+            cout << "Fuera de rango" << endl;
+        }
+    } while (x < 1 || x > 10);
+    cout << "Elegiste " << x << endl;
+`),
+   hints:['Dentro del do lee x con cin. Como el do siempre corre una vez, siempre se lee al menos un número.', 'Un número está fuera de rango si x < 1 || x > 10. Usa esa misma condición en el if y en el while.'],
+   tests:[{i:'15 -2 7', o:'Fuera de rango\nFuera de rango\nElegiste 7'}, {i:'5', o:'Elegiste 5'}, {i:'0 11 1', o:'Fuera de rango\nFuera de rango\nElegiste 1'}, {i:'10', o:'Elegiste 10'}]},
+  {id:'collatz', t:'Desafío: la conjetura de Collatz', d:'Desafío',
+   text:'<p>Lee un número <code>N</code>. Mientras N no sea 1: si N es par, divídelo por 2; si es impar, conviértelo en 3·N + 1. Imprime cuántos pasos hicieron falta para llegar a 1.</p><p>Por ejemplo, 6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1 son 8 pasos. Nadie ha demostrado que siempre se llega a 1, pero se ha comprobado con muchísimos números.</p>',
+   start:wrapMain(`    int n, pasos = 0;
+    cin >> n;
+
+    cout << pasos << endl;
+`),
+   sol:wrapMain(`    int n, pasos = 0;
+    cin >> n;
+    while (n != 1) {
+        if (n % 2 == 0) {
+            n = n / 2;
+        } else {
+            n = 3 * n + 1;
+        }
+        pasos++;
+    }
+    cout << pasos << endl;
+`),
+   hints:['La condición del while es n != 1.', 'Para saber si n es par usa n % 2 == 0. Después del if/else suma 1 a pasos.'],
+   tests:[{i:'6', o:'8'}, {i:'1', o:'0'}, {i:'7', o:'16'}, {i:'27', o:'111'}]}
+];
+let chIdx = 0, hintCount = 0, solArmed = false;
+const solved = new Set(store.get('np-while-solved', []));
+const edPrac = makeEditor($('#pracEditor'), {onChange:() => { store.set('np-while-code-' + CH[chIdx].id, edPrac.get()); }});
+function chListRender(){
+  $('#chList').innerHTML = CH.map((c, i) => '<button class="ch-btn" data-i="' + i + '"' + (i === chIdx ? ' aria-current="true"' : '') + '><span class="t">' + esc(c.t) + '</span><span class="d">' + c.d + (solved.has(c.id) ? ' <span class="done">✓ resuelto</span>' : '') + '</span></button>').join('');
+}
+$('#chList').addEventListener('click', e => { const b = e.target.closest('.ch-btn'); if (b) loadChallenge(+b.dataset.i); });
+function loadChallenge(i){
+  chIdx = i; hintCount = 0; solArmed = false;
+  const c = CH[i];
+  $('#chTitle').textContent = c.t; $('#chText').innerHTML = c.text;
+  $('#chExamples').innerHTML = c.tests.slice(0, 2).map((t, k) => '<div class="ex"><span class="label">Ejemplo ' + (k + 1) + ': entrada</span><pre class="mono">' + esc(t.i) + '</pre><span class="label">Salida esperada</span><pre class="mono">' + esc(t.o) + '</pre></div>').join('');
+  edPrac.set(store.get('np-while-code-' + c.id, c.start));
+  $('#pracHints').innerHTML = ''; $('#pracResults').innerHTML = '';
+  $('#pracHint').disabled = false; $('#pracHint').textContent = 'Ver una pista';
+  $('#pracSol').textContent = 'Ver solución';
+  chListRender();
+}
+function sameOutput(a, b){ const x = inputTokens(a), y = inputTokens(b); return x.length === y.length && x.every((t, i) => t === y[i]); }
+$('#pracRun').addEventListener('click', () => {
+  const c = CH[chIdx], src = edPrac.get();
+  let pass = 0; const rows = [];
+  let firstErrLine = null;
+  for (const t of c.tests){
+    const r = runProgram(src, t.i);
+    const ok = !r.error && sameOutput(r.out, t.o);
+    if (ok) pass++;
+    if (r.error && firstErrLine === null) firstErrLine = r.error.line;
+    rows.push('<tr><td><pre class="mono">' + esc(t.i) + '</pre></td><td><pre class="mono">' + esc(t.o) + '</pre></td><td><pre class="mono">' + (r.error ? '<span class="fail">Error' + (r.error.line ? ' en la línea ' + r.error.line : '') + ':</span> ' + esc(r.error.msg) : esc(r.out || '(nada)')) + '</pre></td><td class="' + (ok ? 'pass' : 'fail') + '">' + (ok ? '✓ Bien' : '✗ No') + '</td></tr>');
+  }
+  if (firstErrLine) edPrac.highlight(firstErrLine, 'err'); else edPrac.clear();
+  const all = pass === c.tests.length;
+  if (all){ solved.add(c.id); store.set('np-while-solved', [...solved]); chListRender(); }
+  $('#pracResults').innerHTML = '<div class="banner ' + (all ? 'ok' : 'no') + '">' + (all ? '¡Resuelto! Pasaste los ' + pass + ' casos de prueba.' : 'Pasaste ' + pass + ' de ' + c.tests.length + ' casos. Compara tu salida con la esperada; para ver qué pasa por dentro, usa Abrir en Paso a paso.') + '</div>' +
+    '<div class="table-wrap"><table class="results"><thead><tr><th>Entrada</th><th>Esperado</th><th>Tu programa</th><th>Resultado</th></tr></thead><tbody>' + rows.join('') + '</tbody></table></div>';
+});
+$('#pracHint').addEventListener('click', () => {
+  const c = CH[chIdx]; if (hintCount >= c.hints.length) return;
+  $('#pracHints').insertAdjacentHTML('beforeend', '<p class="hint"><b>Pista ' + (hintCount + 1) + ':</b> ' + esc(c.hints[hintCount]) + '</p>');
+  hintCount++;
+  if (hintCount >= c.hints.length){ $('#pracHint').disabled = true; $('#pracHint').textContent = 'No hay más pistas'; }
+});
+$('#pracSol').addEventListener('click', () => {
+  if (!solArmed){ solArmed = true; $('#pracSol').textContent = '¿Segura? Toca otra vez'; return; }
+  solArmed = false; $('#pracSol').textContent = 'Ver solución';
+  edPrac.set(CH[chIdx].sol); store.set('np-while-code-' + CH[chIdx].id, CH[chIdx].sol);
+});
+$('#pracReset').addEventListener('click', () => { edPrac.set(CH[chIdx].start); store.set('np-while-code-' + CH[chIdx].id, CH[chIdx].start); $('#pracResults').innerHTML = ''; });
+$('#pracDebug').addEventListener('click', () => { const c = CH[chIdx]; openInPaso(edPrac.get(), c.tests[0].i, 'Tu código del problema "' + c.t + '" con la entrada del ejemplo 1. Vuelve a Práctica para seguir.'); });
+loadChallenge(0);
+
+/* ---------- Inicio ---------- */
+showTab((location.hash || '#como').slice(1));
+</script>
+</body>
+</html>
