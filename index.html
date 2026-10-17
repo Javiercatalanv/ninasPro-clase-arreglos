@@ -7,7 +7,7 @@
      Pega aquí la URL de tu aplicación web de Google Apps Script (termina en /exec).
      Si la dejas vacía, el quiz funciona igual pero no guarda resultados. */
   window.NINAS_PRO_CONFIG = {
-    urlResultados: "https://script.google.com/macros/s/AKfycbzDu3wU9n9FuSNW4cP4YgszXYPEZrsVB6kK29AGloKxubZQdRGgZSOdgXyEykzXxakR/exec"
+    urlResultados: ""
   };
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -323,7 +323,7 @@ main > section.active{display:block;animation:viewIn .35s ease-out}
     <div>
       <p class="sub">Curso Semestral de Programación Competitiva · Básico</p>
       <h1>Clase 7:<br>Arreglos y Vectores</h1>
-      <p style="margin:0 0 1rem;max-width:56ch">Hasta ahora guardábamos un dato por variable. Hoy aprendemos a guardar muchos datos en un solo lugar. Toca cada letra: esta palabra ya es un arreglo.</p>
+      <p style="margin:0 0 1rem;max-width:56ch">Un arreglo es una fila de cajitas con un solo nombre, donde cada cajita tiene su número. Toca cada letra: esta palabra ya es un arreglo de 7 cajitas.</p>
       <div class="word" id="heroWord" role="group" aria-label="La palabra ARREGLO guardada en un arreglo"></div>
       <div class="hero-readout" id="heroOut" aria-live="polite">palabra[<b>?</b>]</div>
       <a class="btn pink" href="#problema" style="display:inline-block;text-decoration:none;margin-top:1.4rem;font-size:1.1rem;padding:.75rem 1.5rem">Empezar la clase</a>
@@ -337,13 +337,13 @@ main > section.active{display:block;animation:viewIn .35s ease-out}
   <div class="wrap">
     <p class="step">Paso 1</p>
     <h2>Imagina este problema…</h2>
-    <p class="lead">Quieres guardar las notas de 30 estudiantes. Con lo que sabemos hasta ahora, necesitaríamos 30 variables distintas, cada una con su propio nombre. ¡Un desorden!</p>
+    <p class="lead">Quieres anotar la temperatura máxima de cada día de octubre para saber cuál fue el día más caluroso. Son 31 días: con lo que sabemos hasta ahora, necesitaríamos 31 variables distintas. ¡Un desorden!</p>
     <div class="box">
       <pre class="code" id="probCode" style="margin-bottom:1rem"></pre>
-      <div class="mess" id="mess" aria-label="30 notas representadas como papelitos"><span class="mess-label">double notas[30];</span></div>
+      <div class="mess" id="mess" aria-label="31 temperaturas representadas como papelitos"><span class="mess-label">int temp[31];</span></div>
       <div class="row" style="margin-top:1rem">
         <button class="btn pink" id="messBtn">Ordenar en un arreglo</button>
-        <span class="small" id="messTxt">Así se ven 30 variables sueltas.</span>
+        <span class="small" id="messTxt">Así se ven 31 variables sueltas.</span>
       </div>
     </div>
   </div>
@@ -355,14 +355,14 @@ main > section.active{display:block;animation:viewIn .35s ease-out}
   <div class="wrap">
     <p class="step">Paso 2</p>
     <h2>Así se ve un arreglo</h2>
-    <p class="lead">Un arreglo es como un estante con espacios numerados: 5 cajitas en fila, cada una con su número debajo. Ese número se llama <strong>índice</strong> y siempre empieza en 0. El primer elemento de <code>a</code> es <code>a[0]</code>, no <code>a[1]</code>. Prueba guardar un valor en una cajita o mostrar lo que tiene dentro.</p>
+    <p class="lead">Tu equipo jugó 5 partidos y guardaste los goles de cada uno en el arreglo <code>goles</code>. El número debajo de cada cajita se llama <strong>índice</strong>: el primer partido está en <code>goles[0]</code> y el quinto en <code>goles[4]</code>. Cambia el resultado de un partido o muestra cuántos goles hubo.</p>
     <div class="box">
       <div class="arr" id="boxArr"></div>
       <div class="row" style="margin-top:1.4rem">
         <label class="small" for="boxIdx"><strong>Índice</strong></label>
         <select class="field" id="boxIdx"></select>
         <label class="small" for="boxVal"><strong>Valor</strong></label>
-        <input class="field num" id="boxVal" type="number" value="99">
+        <input class="field num" id="boxVal" type="number" value="5">
         <button class="btn pink" id="boxSet">Guardar</button>
         <button class="btn ghost" id="boxGet">Mostrar</button>
       </div>
@@ -392,12 +392,14 @@ main > section.active{display:block;animation:viewIn .35s ease-out}
   <div class="wrap">
     <p class="step">Paso 4</p>
     <h2>Ciclos + arreglos, paso a paso</h2>
-    <p class="lead">Los ciclos y los arreglos son la combinación más poderosa: con un <code>for</code> puedes recorrer cientos de datos. Elige un programa, escribe tus números y avanza línea por línea para ver qué hace la computadora.</p>
+    <p class="lead">Un <code>for</code> puede visitar cada cajita de un arreglo, una por una. Elige un programa, cambia los números si quieres y avanza línea por línea para ver qué hace la computadora en cada momento.</p>
     <div class="box">
       <div class="tabs" role="tablist" id="simTabs"></div>
+      <p id="simStory" style="margin:0 0 1rem;color:var(--tinta)"></p>
       <div class="row" style="margin-bottom:1rem">
         <label for="simIn" class="small"><strong>Tus números</strong> (separados por espacio, máximo 10)</label>
-        <input class="field" id="simIn" value="2 7 4 1 8" style="flex:1;min-width:180px;font-family:var(--mono)">
+        <input class="field" id="simIn" value="" style="flex:1;min-width:180px;font-family:var(--mono)">
+        <span id="simFindWrap" class="row" style="gap:.4rem" hidden><label for="simFind" class="small"><strong>Número a buscar</strong></label><input class="field num" id="simFind" type="number" value="7"></span>
         <button class="btn ghost" id="simLoad">Usar estos números</button>
       </div>
       <div class="sim">
@@ -408,7 +410,7 @@ main > section.active{display:block;animation:viewIn .35s ease-out}
             <div class="inputs" id="simToks"></div>
           </div>
           <div>
-            <div class="small" style="font-weight:800;color:var(--azul)">Arreglo <code>a</code></div>
+            <div class="small" style="font-weight:800;color:var(--azul)">Arreglo <code id="simArrName">a</code></div>
             <div class="arr" id="simArr"></div>
           </div>
           <div>
@@ -442,15 +444,16 @@ main > section.active{display:block;animation:viewIn .35s ease-out}
   <div class="wrap">
     <p class="step">Paso 5</p>
     <h2>Error clásico: salirse del arreglo</h2>
-    <p class="lead">Si tu arreglo tiene 5 espacios (de <code>a[0]</code> a <code>a[4]</code>) y tratas de usar <code>a[5]</code> o <code>a[10]</code>, estás leyendo memoria que no es tuya. El programa puede caerse o mostrar números basura. Mueve la flecha y descúbrelo.</p>
+    <p class="lead">El arreglo <code>pisos</code> guarda cuántos pisos tienen 5 edificios, así que sus cajitas van de <code>pisos[0]</code> a <code>pisos[4]</code>. ¿Qué pasa si le pides <code>pisos[6]</code>? Estarías leyendo memoria que no es tuya: el programa puede mostrar un número basura o caerse. Mueve la flecha, o mira el error más común: un <code>for</code> con <code>&lt;=</code>.</p>
     <div class="box oob">
       <pre class="code" id="oobCode"></pre>
       <div class="arr" id="oobArr"></div>
       <div class="mem-label" aria-hidden="true"><span>Tu arreglo</span><span>Memoria que no es tuya</span></div>
       <label class="small" for="oobRange" style="display:block;margin-top:1rem;font-weight:800">Índice: <span id="oobVal" class="mono">0</span></label>
       <input type="range" id="oobRange" min="0" max="9" value="0">
+      <div class="row" style="margin-top:1rem"><button class="btn pink" id="oobLoop">Ejecutar el for con &lt;=</button><button class="btn ghost" id="oobFix">Ejecutar el for corregido</button></div>
       <div class="msg" id="oobMsg" aria-live="polite"></div>
-      <p class="tag" style="margin:1.2rem 0 0;font-size:1.15rem">¡Siempre asegúrate de que tus índices van de 0 a n-1, no hasta n!</p>
+      <p class="tag" style="margin:1.2rem 0 0;font-size:1.15rem">Regla de oro: si el arreglo tiene n cajitas, el último índice válido es n - 1.</p>
     </div>
   </div>
 </section>
@@ -526,7 +529,7 @@ const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>
 
 /* ---------- resaltado de C++ ---------- */
 function hl(line){
-  const re = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(#include\s*<[^>]*>)|\b(int|double|for|if|else|return|using|namespace|while|vector|endl|cin|cout|std|main|bool|char)\b|\b(\d+)\b/g;
+  const re = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(#include\s*<[^>]*>)|\b(int|double|for|if|else|return|using|namespace|while|vector|endl|cin|cout|std|main|bool|char|break|continue)\b|\b(\d+)\b/g;
   let out = "", last = 0, m;
   while ((m = re.exec(line))){
     out += esc(line.slice(last, m.index));
@@ -581,12 +584,12 @@ function renderArr(el, values, opts = {}){
 
 /* ---------- 1. problema ---------- */
 (() => {
-  renderCode($("#probCode"), ["double nota1, nota2, nota3, /* ... */ nota30; // ¡IMPOSIBLE!"]);
+  renderCode($("#probCode"), ["int dia1, dia2, dia3, /* ... */ dia31; // ¡demasiadas variables!"]);
   const mess = $("#mess"), btn = $("#messBtn"), txt = $("#messTxt");
-  const N = 30, notes = [];
+  const N = 31, notes = [];
   const seeds = Array.from({length:N}, (_,i) => [((i*37)%97)/97, ((i*53+11)%89)/89, ((i*29)%23 - 11)]);
   for (let i = 0; i < N; i++){
-    const d = document.createElement("div"); d.className = "note"; d.textContent = "nota" + (i+1);
+    const d = document.createElement("div"); d.className = "note"; d.textContent = "dia" + (i+1);
     mess.appendChild(d); notes.push(d);
   }
   let ordered = false;
@@ -596,17 +599,17 @@ function renderArr(el, values, opts = {}){
       notes.forEach((n,i) => {
         const [sx, sy, r] = seeds[i];
         n.style.width = nw+"px"; n.style.height = nh+"px";
-        n.textContent = "nota" + (i+1);
+        n.textContent = "dia" + (i+1);
         n.style.transform = `translate(${sx*(W-nw-10)+5}px, ${sy*(H-nh-10)+5}px) rotate(${r*2}deg)`;
       });
     } else {
-      const cols = W < 520 ? 6 : 10, cw = Math.min(64, Math.floor((W-24)/cols)), ch = 46;
+      const cols = W < 520 ? 8 : 11, cw = Math.min(64, Math.floor((W-24)/cols)), ch = 46;
       const rows = Math.ceil(N/cols), gap = 22;
       const startX = (W - cols*cw)/2, startY = Math.max(36, (H - rows*(ch+gap))/2 + 14);
       notes.forEach((n,i) => {
         const c = i%cols, r = Math.floor(i/cols);
         n.style.width = cw+"px"; n.style.height = ch+"px";
-        n.innerHTML = `<span style="display:flex;flex-direction:column;align-items:center;line-height:1.1"><span style="color:var(--tinta)">${(4+((i*7)%30)/10).toFixed(1)}</span><span style="font-size:.66rem">[${i}]</span></span>`;
+        n.innerHTML = `<span style="display:flex;flex-direction:column;align-items:center;line-height:1.1"><span style="color:var(--tinta)">${14+((i*37)%13)}°</span><span style="font-size:.66rem">[${i}]</span></span>`;
         n.style.transform = `translate(${startX + c*cw}px, ${startY + r*(ch+gap)}px) rotate(0deg)`;
       });
     }
@@ -614,7 +617,7 @@ function renderArr(el, values, opts = {}){
   btn.addEventListener("click", () => {
     ordered = !ordered; mess.classList.toggle("ordered", ordered); layout();
     btn.textContent = ordered ? "Volver al desorden" : "Ordenar en un arreglo";
-    txt.innerHTML = ordered ? "Un solo nombre, <code>notas</code>, y 30 cajitas numeradas de <code>[0]</code> a <code>[29]</code>." : "Así se ven 30 variables sueltas.";
+    txt.innerHTML = ordered ? "Un solo nombre, <code>temp</code>, y 31 cajitas numeradas de <code>[0]</code> a <code>[30]</code>. El 1 de octubre está en <code>temp[0]</code>." : "Así se ven 31 variables sueltas.";
   });
   addEventListener("resize", layout); layout();
 })();
@@ -622,24 +625,23 @@ function renderArr(el, values, opts = {}){
 
 /* ---------- 3. cajitas ---------- */
 (() => {
-  const a = [10,25,3,8,17], el = $("#boxArr"), sel = $("#boxIdx"), val = $("#boxVal"), code = $("#boxCode"), msg = $("#boxMsg");
+  const a = [2,0,3,1,4], el = $("#boxArr"), sel = $("#boxIdx"), val = $("#boxVal"), code = $("#boxCode"), msg = $("#boxMsg");
   sel.innerHTML = a.map((_,i) => `<option value="${i}">${i}</option>`).join("");
-  sel.value = "2";
-  const draw = (pop = -1) => renderArr(el, a, {ptr:+sel.value, ptrLabel:`a[${sel.value}]`, pop, cls:{[+sel.value]:"cur"}});
-  const showCode = () => renderCode(code, [`int a[5] = {${a.join(", ")}};`, `a[${sel.value}] = ${val.value || 0};      // guardar`, `cout << a[${sel.value}];  // mostrar`]);
+  sel.value = "1"; val.value = "5";
+  const draw = (pop = -1) => renderArr(el, a, {ptr:+sel.value, ptrLabel:`goles[${sel.value}]`, pop, cls:{[+sel.value]:"cur"}});
+  const lines = () => [`int goles[5] = {${a.join(", ")}};`, `goles[${sel.value}] = ${val.value || 0};      // cambiar el partido ${+sel.value+1}`, `cout << goles[${sel.value}];  // mostrar`];
+  const showCode = (hi = -1) => renderCode(code, lines(), hi);
   sel.addEventListener("change", () => { draw(); showCode(); });
-  val.addEventListener("input", showCode);
+  val.addEventListener("input", () => showCode());
   $("#boxSet").addEventListener("click", () => {
     const i = +sel.value, v = parseInt(val.value, 10);
-    if (Number.isNaN(v)){ msg.className = "msg err"; msg.textContent = "Escribe un número entero para guardar."; return; }
-    const old = a[i]; a[i] = v; draw(i); showCode();
-    renderCode(code, [`int a[5];  // ahora vale {${a.join(", ")}}`, `a[${i}] = ${v};      // guardar`, `cout << a[${i}];  // mostrar`], 1);
-    msg.className = "msg ok"; msg.innerHTML = `Guardaste <strong>${v}</strong> en la cajita <code>a[${i}]</code>. El ${esc(old)} que había antes se borró.`;
+    if (Number.isNaN(v) || v < 0){ msg.className = "msg err"; msg.textContent = "Escribe una cantidad de goles (un entero de 0 o más)."; return; }
+    const old = a[i]; a[i] = v; draw(i); showCode(1);
+    msg.className = "msg ok"; msg.innerHTML = `El partido ${i+1} ahora tiene <strong>${v}</strong> goles en <code>goles[${i}]</code>. El ${esc(old)} que había antes se reemplazó: cada cajita guarda un solo valor.`;
   });
   $("#boxGet").addEventListener("click", () => {
-    const i = +sel.value; draw(i);
-    renderCode(code, [`int a[5];  // vale {${a.join(", ")}}`, `a[${i}] = ${val.value || 0};      // guardar`, `cout << a[${i}];  // mostrar`], 2);
-    msg.className = "msg ok"; msg.innerHTML = `En pantalla aparece: <strong>${a[i]}</strong>. Mostrar no cambia lo que hay en la cajita.`;
+    const i = +sel.value; draw(i); showCode(2);
+    msg.className = "msg ok"; msg.innerHTML = `En pantalla aparece: <strong>${a[i]}</strong> (goles del partido ${i+1}). Mostrar no cambia lo que hay en la cajita.`;
   });
   draw(); showCode();
   addEventListener("resize", () => draw());
@@ -648,11 +650,12 @@ function renderArr(el, values, opts = {}){
 /* ---------- 4. crear ---------- */
 (() => {
   const forms = [
-    {label:"int a[5];", code:["int a[5]; // 5 espacios, sin valores todavía"], vals:[null,null,null,null,null], msg:"Se crean 5 cajitas, pero no les pusimos nada. Pueden tener números basura, por eso se rellenan con un <code>for</code> y <code>cin</code>."},
-    {label:"int a[] = {...};", code:["int a[] = {4, 8, 15}; // C++ cuenta los valores"], vals:[4,8,15], msg:"No escribimos el tamaño: C++ cuenta los valores y crea un arreglo de 3."},
-    {label:"int a[5] = {4, 8};", code:["int a[5] = {4, 8}; // 5 espacios, 2 valores"], vals:[4,8,0,0,0], msg:"Si das menos valores que el tamaño, el resto de las cajitas se llena con <strong>0</strong>."},
-    {label:"int a[5] = {0};", code:["int a[5] = {0}; // todo en cero"], vals:[0,0,0,0,0], msg:"Truco útil: crea el arreglo con todas las cajitas en 0. Perfecto para contadores."},
-    {label:"leer con for", code:["int n;","cin >> n;","int a[100]; // espacio de sobra","for (int i = 0; i < n; i++) {","    cin >> a[i];","}"], vals:[3,9,1,null,null,null], msg:"La forma más común: un tamaño grande fijo y un <code>for</code> que va de 0 a n-1. Aquí n = 3, así que solo se llenan las 3 primeras cajitas."}
+    {label:"int puntos[6];", code:["int puntos[6]; // 6 cajitas, todavía vacías"], vals:[null,null,null,null,null,null], msg:"Se crean 6 cajitas, pero no les pusimos nada. Pueden tener números basura, así que hay que llenarlas antes de usarlas."},
+    {label:"int primos[] = {...};", code:["int primos[] = {2, 3, 5, 7, 11}; // C++ cuenta los valores"], vals:[2,3,5,7,11], msg:"No escribimos el tamaño entre corchetes: C++ cuenta los 5 valores y crea un arreglo de 5."},
+    {label:"int votos[4] = {12, 7};", code:["int votos[4] = {12, 7}; // 4 cajitas, solo 2 valores"], vals:[12,7,0,0], msg:"Si das menos valores que el tamaño, las cajitas que sobran quedan en <strong>0</strong>. Aquí las candidatas 3 y 4 todavía no tienen votos."},
+    {label:"int caras[6] = {0};", code:["int caras[6] = {0}; // para contar las caras de un dado"], vals:[0,0,0,0,0,0], msg:"Truco útil: todas las cajitas parten en 0. Perfecto para contar, por ejemplo, cuántas veces sale cada cara al lanzar un dado."},
+    {label:"llenar con for", code:["int tabla3[5];","for (int i = 0; i < 5; i++) {","    tabla3[i] = i * 3; // la tabla del 3","}"], vals:[0,3,6,9,12], msg:"También puedes llenar un arreglo con una fórmula. En cada vuelta, la cajita <code>i</code> recibe <code>i * 3</code>: 0, 3, 6, 9, 12."},
+    {label:"leer con cin", code:["int n;","cin >> n;              // la usuaria escribe 3","int edades[100];       // espacio de sobra","for (int i = 0; i < n; i++) {","    cin >> edades[i];  // escribe 11 13 12","}"], vals:[11,13,12,null,null,null], msg:"Cuando no sabes cuántos datos vendrán, creas un arreglo grande y lees solo <code>n</code>. Aquí n = 3, así que solo se llenan las 3 primeras cajitas."}
   ];
   const tabs = $("#createTabs"), code = $("#createCode"), arr = $("#createArr"), msg = $("#createMsg");
   tabs.innerHTML = forms.map((f,i) => `<button role="tab" aria-selected="${i===0}" data-i="${i}">${esc(f.label)}</button>`).join("");
@@ -675,96 +678,132 @@ function renderArr(el, values, opts = {}){
 
 /* ---------- 5. simulador ---------- */
 (() => {
-  const head = n => [`int n = ${n};`, "int a[100];", "for (int i = 0; i < n; i++) {", "    cin >> a[i];", "}"];
+  const head = (n, a) => [`int n = ${n};`, `int ${a}[100];`, "for (int i = 0; i < n; i++) {", `    cin >> ${a}[i];`, "}"];
   const P = {
-    leer:  {name:"Leer y mostrar", code:n => [...head(n), "for (int i = 0; i < n; i++) {", "    cout << a[i] << endl;", "}"]},
-    suma:  {name:"Sumar", code:n => [...head(n), "int suma = 0;", "for (int i = 0; i < n; i++) {", "    suma = suma + a[i];", "}", "cout << \"Suma: \" << suma << endl;"]},
-    maximo:{name:"Encontrar el máximo", code:n => [...head(n), "int maximo = a[0];", "for (int i = 1; i < n; i++) {", "    if (a[i] > maximo) {", "        maximo = a[i];", "    }", "}", "cout << \"El mayor es: \" << maximo;"]},
-    pares: {name:"Contar pares", code:n => [...head(n), "int pares = 0;", "for (int i = 0; i < n; i++) {", "    if (a[i] % 2 == 0) {", "        pares++;", "    }", "}", "cout << pares << \" pares\";"]}
+    reves:  {name:"Mostrar al revés", arr:"x", nums:[4,8,15,16,23],
+             story:"Lee una lista de números y la muestra del último al primero. Fíjate en el segundo <code>for</code>: parte en <code>n - 1</code> y va bajando.",
+             code:(n) => [...head(n,"x"), "for (int i = n - 1; i >= 0; i--) {", "    cout << x[i] << \" \";", "}"]},
+    minimo: {name:"La más rápida", arr:"tiempos", nums:[52,47,60,45,49],
+             story:"Guardamos cuántos segundos tardó cada corredora en una carrera. Gana la que tardó <strong>menos</strong>: buscamos el valor más pequeño.",
+             code:(n) => [...head(n,"tiempos"), "int menor = tiempos[0];", "for (int i = 1; i < n; i++) {", "    if (tiempos[i] < menor) {", "        menor = tiempos[i];", "    }", "}", "cout << \"Ganó con \" << menor << \" segundos\";"]},
+    buscar: {name:"Buscar un número", arr:"num", nums:[3,9,7,1,7],
+             story:"Revisamos las cajitas una por una hasta encontrar el número buscado. Cuando aparece, <code>break</code> corta el ciclo: ya no hace falta seguir mirando.",
+             code:(n, b) => [...head(n,"num"), `int buscado = ${b};`, "int posicion = -1;  // -1 = todavía no aparece", "for (int i = 0; i < n; i++) {", "    if (num[i] == buscado) {", "        posicion = i;", "        break;", "    }", "}", "if (posicion != -1) cout << \"Posición: \" << posicion;", "else cout << \"No está\";"]},
+    aprob:  {name:"Contar aprobadas", arr:"notas", nums:[6,3,7,4,2,5],
+             story:"Notas de un curso, del 1 al 7. Una nota de 4 o más es aprobada. Contamos cuántas hay con un contador.",
+             code:(n) => [...head(n,"notas"), "int aprobadas = 0;", "for (int i = 0; i < n; i++) {", "    if (notas[i] >= 4) {", "        aprobadas++;", "    }", "}", "cout << \"Aprobadas: \" << aprobadas;"]},
+    doble:  {name:"Duplicar puntos", arr:"puntos", nums:[10,25,5,40],
+             story:"¡Ronda de puntos dobles! Cambiamos cada cajita por su valor multiplicado por 2 y después mostramos el arreglo nuevo.",
+             code:(n) => [...head(n,"puntos"), "for (int i = 0; i < n; i++) {", "    puntos[i] = puntos[i] * 2;", "}", "for (int i = 0; i < n; i++) {", "    cout << puntos[i] << \" \";", "}"]}
   };
 
-  function build(key, nums){
-    const n = nums.length, steps = [];
+  function build(key, nums, buscado){
+    const n = nums.length, steps = [], A = P[key].arr;
     const st = {arr: Array(n).fill(null), vars:{n}, out:"", used:0, ptr:null, cls:{}, pop:-1};
     const snap = (line, note, changed = []) => {
       steps.push({line, note, arr:[...st.arr], vars:{...st.vars}, out:st.out, used:st.used, ptr:st.ptr, cls:{...st.cls}, pop:st.pop, changed});
       st.pop = -1;
     };
-    snap(0, `Creamos <code>n</code> y le damos el valor ${n}: así sabemos cuántos números vamos a leer.`, ["n"]);
-    snap(1, "Creamos el arreglo <code>a</code> con 100 espacios. Usaremos solo los primeros " + n + " (aquí ves esos).");
+    snap(0, `Creamos <code>n</code> = ${n}: así sabemos cuántos números vamos a leer.`, ["n"]);
+    snap(1, `Creamos el arreglo <code>${A}</code> con 100 espacios. Solo usaremos los primeros ${n} (aquí ves esos).`);
     for (let i = 0; i < n; i++){
       st.vars.i = i; st.ptr = i; st.cls = {[i]:"cur"};
       snap(2, i === 0 ? `Empieza el <code>for</code> con <code>i = 0</code>. ¿0 &lt; ${n}? Sí, entramos.` : `<code>i</code> sube a ${i}. ¿${i} &lt; ${n}? Sí, otra vuelta.`, ["i"]);
       st.arr[i] = nums[i]; st.used = i+1; st.pop = i;
-      snap(3, `<code>cin</code> lee el ${nums[i]} y lo guarda en la cajita <code>a[${i}]</code>.`);
+      snap(3, `<code>cin</code> lee el ${nums[i]} y lo guarda en <code>${A}[${i}]</code>.`);
     }
     st.vars.i = n; st.ptr = null; st.cls = {};
-    snap(2, `<code>i</code> sube a ${n}. ¿${n} &lt; ${n}? No. El ciclo termina: ya leímos todo.`, ["i"]);
+    snap(2, `<code>i</code> sube a ${n}. ¿${n} &lt; ${n}? No. Terminamos de leer.`, ["i"]);
     delete st.vars.i;
 
-    if (key === "leer"){
-      for (let i = 0; i < n; i++){
+    if (key === "reves"){
+      for (let i = n-1; i >= 0; i--){
         st.vars.i = i; st.ptr = i; st.cls = {[i]:"cur"};
-        snap(5, i === 0 ? "Segundo <code>for</code>: ahora recorremos para mostrar. <code>i = 0</code>." : `<code>i = ${i}</code>. ¿${i} &lt; ${n}? Sí.`, ["i"]);
-        st.out += st.arr[i] + "\n";
-        snap(6, `Mostramos <code>a[${i}]</code>, que vale ${st.arr[i]}.`);
+        snap(5, i === n-1 ? `Este <code>for</code> empieza en <code>i = n - 1 = ${n-1}</code>, la última cajita. ¿${i} &gt;= 0? Sí.` : `<code>i--</code> baja a ${i}. ¿${i} &gt;= 0? Sí.`, ["i"]);
+        st.out += st.arr[i] + " ";
+        snap(6, `Mostramos <code>x[${i}]</code>, que vale ${st.arr[i]}.`);
       }
-      st.vars.i = n; st.ptr = null; st.cls = {};
-      snap(5, `¿${n} &lt; ${n}? No. ¡Listo! Mostramos los mismos números que leímos.`, ["i"]);
+      st.vars.i = -1; st.ptr = null; st.cls = {};
+      snap(5, "<code>i</code> baja a -1. ¿-1 &gt;= 0? No. ¡Listo! La lista quedó al revés.", ["i"]);
     }
-    if (key === "suma"){
-      st.vars.suma = 0; snap(5, "El acumulador <code>suma</code> empieza en 0.", ["suma"]);
-      for (let i = 0; i < n; i++){
-        st.vars.i = i; st.ptr = i; st.cls = {[i]:"cur"};
-        snap(6, `<code>i = ${i}</code>. ¿${i} &lt; ${n}? Sí.`, ["i"]);
-        const before = st.vars.suma; st.vars.suma += st.arr[i];
-        snap(7, `<code>suma = ${before} + ${st.arr[i]}</code>, ahora suma vale ${st.vars.suma}.`, ["suma"]);
-      }
-      st.vars.i = n; st.ptr = null; st.cls = {};
-      snap(6, `¿${n} &lt; ${n}? No. Terminamos de sumar.`, ["i"]);
-      delete st.vars.i;
-      st.out += `Suma: ${st.vars.suma}\n`;
-      snap(9, `Mostramos el resultado: ${st.vars.suma}.`);
-    }
-    if (key === "maximo"){
-      st.vars.maximo = st.arr[0]; st.cls = {0:"best"};
-      snap(5, `Empezamos suponiendo que el mayor es el primero: <code>a[0]</code> = ${st.arr[0]}.`, ["maximo"]);
+    if (key === "minimo"){
+      st.vars.menor = st.arr[0]; st.cls = {0:"best"};
+      snap(5, `Partimos suponiendo que la más rápida es la primera: <code>tiempos[0]</code> = ${st.arr[0]}.`, ["menor"]);
       let bi = 0;
       for (let i = 1; i < n; i++){
         st.vars.i = i; st.ptr = i; st.cls = {[bi]:"best", [i]:"cur"};
-        snap(6, i === 1 ? "Recorremos desde el segundo (<code>i = 1</code>), porque el primero ya lo usamos." : `<code>i = ${i}</code>. ¿${i} &lt; ${n}? Sí.`, ["i"]);
-        const big = st.arr[i] > st.vars.maximo;
-        snap(7, `¿${st.arr[i]} &gt; ${st.vars.maximo}? ${big ? "¡Sí! Encontramos uno más grande." : "No, seguimos."}`);
-        if (big){ st.vars.maximo = st.arr[i]; bi = i; st.cls = {[i]:"best"}; snap(8, `Reemplazamos: ahora <code>maximo</code> = ${st.vars.maximo}.`, ["maximo"]); }
+        snap(6, i === 1 ? "Revisamos desde la segunda corredora (<code>i = 1</code>)." : `<code>i = ${i}</code>. ¿${i} &lt; ${n}? Sí.`, ["i"]);
+        const less = st.arr[i] < st.vars.menor;
+        snap(7, `¿${st.arr[i]} &lt; ${st.vars.menor}? ${less ? "¡Sí! Esta corredora fue más rápida." : "No, fue más lenta. Seguimos."}`);
+        if (less){ st.vars.menor = st.arr[i]; bi = i; st.cls = {[i]:"best"}; snap(8, `Actualizamos: ahora <code>menor</code> = ${st.vars.menor}.`, ["menor"]); }
       }
       st.vars.i = n; st.ptr = null; st.cls = {[bi]:"best"};
-      snap(6, `¿${n} &lt; ${n}? No. Revisamos todos.`, ["i"]);
+      snap(6, `¿${n} &lt; ${n}? No. Revisamos a todas.`, ["i"]);
       delete st.vars.i;
-      st.out += `El mayor es: ${st.vars.maximo}`;
-      snap(11, `Mostramos al ganador: ${st.vars.maximo}, que estaba en <code>a[${bi}]</code>.`);
+      st.out += `Ganó con ${st.vars.menor} segundos`;
+      snap(11, `La ganadora es la corredora de <code>tiempos[${bi}]</code>, con ${st.vars.menor} segundos.`);
     }
-    if (key === "pares"){
-      st.vars.pares = 0; snap(5, "El contador <code>pares</code> empieza en 0.", ["pares"]);
+    if (key === "buscar"){
+      st.vars.buscado = buscado; snap(5, `Guardamos el número que queremos encontrar: ${buscado}.`, ["buscado"]);
+      st.vars.posicion = -1; snap(6, "<code>posicion</code> parte en -1, que significa “todavía no lo encontramos”.", ["posicion"]);
+      const seen = {}; let found = -1;
+      for (let i = 0; i < n; i++){
+        st.vars.i = i; st.ptr = i; st.cls = {...seen, [i]:"cur"};
+        snap(7, i === 0 ? "Empezamos a revisar desde <code>i = 0</code>." : `<code>i = ${i}</code>. ¿${i} &lt; ${n}? Sí.`, ["i"]);
+        const eq = st.arr[i] === buscado;
+        snap(8, `¿<code>num[${i}]</code> (${st.arr[i]}) == ${buscado}? ${eq ? "¡Sí, lo encontramos!" : "No, seguimos buscando."}`);
+        if (eq){
+          st.vars.posicion = i; st.cls = {...seen, [i]:"good"}; snap(9, `Anotamos dónde estaba: <code>posicion</code> = ${i}.`, ["posicion"]);
+          snap(10, "<code>break</code> sale del ciclo de inmediato. Las cajitas que quedan ni se miran.");
+          found = i; break;
+        }
+        seen[i] = "bad";
+      }
+      if (found === -1){ st.vars.i = n; st.ptr = null; st.cls = {...seen}; snap(7, `¿${n} &lt; ${n}? No. Revisamos todas y no apareció.`, ["i"]); }
+      st.ptr = null; delete st.vars.i;
+      if (found !== -1){ st.out += `Posición: ${found}`; snap(13, `<code>posicion</code> no es -1, así que mostramos dónde está: ${found}.`); }
+      else { snap(13, "<code>posicion</code> sigue en -1, así que la primera condición es falsa…"); st.out += "No está"; snap(15, `…y se ejecuta el <code>else</code>: el ${buscado} no está en el arreglo.`); }
+    }
+    if (key === "aprob"){
+      st.vars.aprobadas = 0; snap(5, "El contador <code>aprobadas</code> empieza en 0.", ["aprobadas"]);
       const good = {};
       for (let i = 0; i < n; i++){
         st.vars.i = i; st.ptr = i; st.cls = {...good, [i]:"cur"};
         snap(6, `<code>i = ${i}</code>. ¿${i} &lt; ${n}? Sí.`, ["i"]);
-        const r = ((st.arr[i] % 2) + 2) % 2, even = r === 0;
-        snap(7, `${st.arr[i]} % 2 = ${r}. ¿Es igual a 0? ${even ? "Sí, ¡es par!" : "No, es impar."}`);
-        if (even){ good[i] = "good"; st.cls = {...good}; st.vars.pares++; snap(8, `Sumamos 1 al contador: <code>pares</code> = ${st.vars.pares}.`, ["pares"]); }
+        const ok = st.arr[i] >= 4;
+        snap(7, `¿${st.arr[i]} &gt;= 4? ${ok ? "Sí, ¡aprobada!" : "No, esta nota no alcanza."}`);
+        if (ok){ good[i] = "good"; st.cls = {...good}; st.vars.aprobadas++; snap(8, `Sumamos 1: <code>aprobadas</code> = ${st.vars.aprobadas}.`, ["aprobadas"]); }
       }
       st.vars.i = n; st.ptr = null; st.cls = {...good};
-      snap(6, `¿${n} &lt; ${n}? No. Revisamos todos.`, ["i"]);
+      snap(6, `¿${n} &lt; ${n}? No. Revisamos todas las notas.`, ["i"]);
       delete st.vars.i;
-      st.out += `${st.vars.pares} pares`;
-      snap(11, `Resultado: ${st.vars.pares} pares (las cajitas verdes).`);
+      st.out += `Aprobadas: ${st.vars.aprobadas}`;
+      snap(11, `Resultado: ${st.vars.aprobadas} aprobadas (las cajitas verdes).`);
+    }
+    if (key === "doble"){
+      for (let i = 0; i < n; i++){
+        st.vars.i = i; st.ptr = i; st.cls = {[i]:"cur"};
+        snap(5, `<code>i = ${i}</code>. ¿${i} &lt; ${n}? Sí.`, ["i"]);
+        const old = st.arr[i]; st.arr[i] = old * 2; st.pop = i;
+        snap(6, `Leemos <code>puntos[${i}]</code> (${old}), lo multiplicamos por 2 y guardamos ${st.arr[i]} en la <strong>misma</strong> cajita.`);
+      }
+      st.vars.i = n; st.ptr = null; st.cls = {};
+      snap(5, `¿${n} &lt; ${n}? No. Todas las cajitas cambiaron.`, ["i"]);
+      for (let i = 0; i < n; i++){
+        st.vars.i = i; st.ptr = i; st.cls = {[i]:"cur"};
+        snap(8, i === 0 ? "Otro <code>for</code>, ahora para mostrar el resultado." : `<code>i = ${i}</code>.`, ["i"]);
+        st.out += st.arr[i] + " ";
+        snap(9, `Mostramos <code>puntos[${i}]</code>: ${st.arr[i]}.`);
+      }
+      st.vars.i = n; st.ptr = null; st.cls = {};
+      snap(8, "¡Listo! Todos los puntos quedaron duplicados.", ["i"]);
     }
     return steps;
   }
 
   const tabs = $("#simTabs"), code = $("#simCode"), arr = $("#simArr"), vars = $("#simVars"), out = $("#simOut"), toks = $("#simToks"),
-        narr = $("#simNarr"), prog = $("#simProg"), inp = $("#simIn"), playBtn = $("#simPlay");
-  let key = "suma", nums = [2,7,4,1,8], steps = [], k = 0, timer = null;
+        narr = $("#simNarr"), prog = $("#simProg"), inp = $("#simIn"), playBtn = $("#simPlay"), find = $("#simFind");
+  let key = "minimo", nums = P[key].nums.slice(), buscado = 7, steps = [], k = 0, timer = null;
   tabs.innerHTML = Object.entries(P).map(([id,p]) => `<button role="tab" data-k="${id}" aria-selected="${id===key}">${p.name}</button>`).join("");
 
   function parse(){
@@ -775,14 +814,17 @@ function renderArr(el, values, opts = {}){
   function load(){
     stop();
     tabs.querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", b.dataset.k === key));
-    steps = build(key, nums); k = 0; draw();
+    $("#simStory").innerHTML = P[key].story;
+    $("#simArrName").textContent = P[key].arr;
+    $("#simFindWrap").hidden = key !== "buscar";
+    inp.value = nums.join(" ");
+    steps = build(key, nums, buscado); k = 0; draw();
   }
   function draw(){
-    const s = steps[k], lines = P[key].code(nums.length);
+    const s = steps[k], lines = P[key].code(nums.length, buscado);
     renderCode(code, lines, s.line);
-    const hlLine = code.querySelector(".hl");
-    if (hlLine && code.scrollHeight > code.clientHeight) hlLine.scrollIntoView({block:"nearest"});
-    toks.innerHTML = nums.map((x,i) => `<span class="tok${i < s.used - (steps[k].line===3?1:0) ? " used" : ""}${steps[k].line===3 && i===s.used-1 ? " now" : ""}">${x}</span>`).join("");
+    const reading = s.line === 3;
+    toks.innerHTML = nums.map((x,i) => `<span class="tok${i < s.used - (reading?1:0) ? " used" : ""}${reading && i===s.used-1 ? " now" : ""}">${x}</span>`).join("");
     renderArr(arr, s.arr, {cls:s.cls, ptr:s.ptr, ptrLabel:s.ptr!==null?`i = ${s.ptr}`:"", pop:s.pop});
     vars.innerHTML = Object.entries(s.vars).map(([n,v]) => `<span class="var${s.changed.includes(n) ? " changed" : ""}">${n} = <b>${v}</b></span>`).join("") || '<span class="small">Todavía no hay variables.</span>';
     out.innerHTML = s.out ? esc(s.out) : '<span class="ph">(nada todavía)</span>';
@@ -791,19 +833,19 @@ function renderArr(el, values, opts = {}){
     prog.style.width = (k/(steps.length-1)*100) + "%";
     $("#simBack").disabled = k === 0;
     $("#simStep").disabled = k === steps.length-1;
-    if (k === steps.length-1){ playBtn.textContent = "Reproducir"; }
   }
   const delay = () => [1400, 1000, 700, 420, 220][$("#simSpeed").value - 1];
   function stop(){ clearTimeout(timer); timer = null; playBtn.textContent = "Reproducir"; }
   function tick(){ if (k < steps.length-1){ k++; draw(); timer = setTimeout(tick, delay()); } else stop(); }
 
-  tabs.addEventListener("click", e => { const b = e.target.closest("button"); if (b){ key = b.dataset.k; load(); }});
+  tabs.addEventListener("click", e => { const b = e.target.closest("button"); if (b){ key = b.dataset.k; nums = P[key].nums.slice(); load(); }});
   $("#simLoad").addEventListener("click", () => {
     const v = parse();
     if (!v){ narr.innerHTML = "Escribe solo números enteros separados por espacios, por ejemplo: <code>3 10 6 1</code>."; inp.focus(); return; }
-    nums = v; inp.value = v.join(" "); load();
+    const b = parseInt(find.value, 10); if (!Number.isNaN(b)) buscado = b;
+    nums = v; load();
   });
-  inp.addEventListener("keydown", e => { if (e.key === "Enter") $("#simLoad").click(); });
+  [inp, find].forEach(x => x.addEventListener("keydown", e => { if (e.key === "Enter") $("#simLoad").click(); }));
   $("#simStep").addEventListener("click", () => { stop(); if (k < steps.length-1){ k++; draw(); }});
   $("#simBack").addEventListener("click", () => { stop(); if (k > 0){ k--; draw(); }});
   $("#simReset").addEventListener("click", () => { stop(); k = 0; draw(); });
@@ -819,22 +861,38 @@ function renderArr(el, values, opts = {}){
 
 /* ---------- 6. fuera de rango ---------- */
 (() => {
-  const a = [10,25,3,8,17], el = $("#oobArr"), r = $("#oobRange"), msg = $("#oobMsg"), val = $("#oobVal"), code = $("#oobCode");
+  const a = [12,4,30,7,21], el = $("#oobArr"), r = $("#oobRange"), msg = $("#oobMsg"), val = $("#oobVal"), code = $("#oobCode");
   const junk = [-8472, 0, 32767, 1953, -1];
+  let mode = "slider", loopTimer = null, printed = "";
   function draw(){
     const i = +r.value, out = i >= a.length; val.textContent = i;
-    renderCode(code, ["int a[5] = {10, 25, 3, 8, 17};", `cout << a[${i}];`], 1);
-    renderArr(el, a, {ghosts:5, ptr:i, ptrLabel:`a[${i}]`, ptrErr:out, cls:{[i]: out ? "bad" : "cur"}});
+    if (mode === "slider") renderCode(code, ["int pisos[5] = {12, 4, 30, 7, 21};", `cout << pisos[${i}];`], 1);
+    else renderCode(code, ["int pisos[5] = {12, 4, 30, 7, 21};", `for (int i = 0; i ${mode === "bug" ? "<=" : "<"} 5; i++) {`, "    cout << pisos[i] << \" \";", "}"], 2);
+    renderArr(el, a, {ghosts:5, ptr:i, ptrLabel: mode === "slider" ? `pisos[${i}]` : `i = ${i}`, ptrErr:out, cls:{[i]: out ? "bad" : "cur"}});
+    const pre = mode === "slider" ? "" : `Pantalla: <code>${esc(printed.trim())}</code><br>`;
     if (out){
       msg.className = "msg err";
-      msg.innerHTML = `¡Te saliste! <code>a[${i}]</code> no es parte del arreglo. El programa podría mostrar basura como <strong>${junk[i-5]}</strong> o caerse. Los índices válidos son del 0 al 4.`;
+      msg.innerHTML = pre + `¡Te saliste! <code>pisos[${i}]</code> no es parte del arreglo. El programa podría mostrar basura como <strong>${junk[i-5]}</strong> o caerse. Los índices válidos son del 0 al 4.` + (mode === "bug" ? " El culpable es el <code>&lt;=</code>: con <code>i &lt;= 5</code> la última vuelta usa <code>i = 5</code>." : "");
       el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake");
     } else {
       msg.className = "msg ok";
-      msg.innerHTML = `Todo bien: <code>a[${i}]</code> vale <strong>${a[i]}</strong>.` + (i === 4 ? " Este es el último índice: 5 elementos, último índice 4." : "");
+      msg.innerHTML = pre + `Todo bien: <code>pisos[${i}]</code> vale <strong>${a[i]}</strong>.` + (i === 4 && mode !== "fix" ? " Es el último índice: 5 cajitas, último índice 4." : "");
     }
   }
-  r.addEventListener("input", draw); addEventListener("resize", draw); draw();
+  function runLoop(m){
+    clearTimeout(loopTimer); mode = m; printed = "";
+    const last = m === "bug" ? 5 : 4; let i = 0;
+    const step = () => {
+      r.value = i; printed += (i < 5 ? a[i] : junk[0]) + " "; draw();
+      if (i < last){ i++; loopTimer = setTimeout(step, reduce ? 0 : 700); }
+      else if (m === "fix"){ msg.innerHTML += " Con <code>i &lt; 5</code> el ciclo se detiene justo a tiempo."; }
+    };
+    step();
+  }
+  r.addEventListener("input", () => { clearTimeout(loopTimer); mode = "slider"; draw(); });
+  $("#oobLoop").addEventListener("click", () => runLoop("bug"));
+  $("#oobFix").addEventListener("click", () => runLoop("fix"));
+  addEventListener("resize", draw); draw();
 })();
 
 /* ---------- 7. vectores ---------- */
@@ -872,14 +930,14 @@ function renderArr(el, values, opts = {}){
 /* ---------- 9. quiz ---------- */
 (() => {
   const Q = [
-    {q:"¿En qué índice está el PRIMER elemento de un arreglo?", o:["1","0","-1","Depende"], a:1, e:"Los índices siempre empiezan en 0. El primer elemento de <code>a</code> es <code>a[0]</code>."},
-    {q:"Si el arreglo tiene 5 elementos, el ÚLTIMO índice es…", o:["5","4","6","1"], a:1, e:"Si empiezas a contar en 0, con 5 elementos llegas hasta 4: 0, 1, 2, 3, 4."},
-    {q:"Si escribimos <code>int a[] = {7, 3, 9};</code>, ¿cuánto vale <code>a[1]</code>?", o:["7","3","9","No existe"], a:1, e:"<code>a[0]</code> es 7, <code>a[1]</code> es 3 y <code>a[2]</code> es 9."},
-    {q:"¿Qué tiene de malo <code>for (int i = 0; i &lt;= n; i++)</code> para recorrer un arreglo de n elementos?", o:["Nada, está perfecto","Se salta el primer elemento","Llega hasta <code>a[n]</code>, que está fuera del arreglo","Es más lento"], a:2, e:"Con <code>&lt;=</code> la última vuelta usa <code>i = n</code>, y <code>a[n]</code> ya no es parte del arreglo. Usa <code>i &lt; n</code>."},
-    {q:"Si <code>a = {1, 2, 3, 4}</code> y sumamos con <code>suma = suma + a[i]</code> empezando en 0, ¿cuánto vale <code>suma</code> al final?", o:["4","10","24","0"], a:1, e:"1 + 2 + 3 + 4 = 10. El acumulador va guardando el total en cada vuelta."},
-    {q:"¿Qué contiene <code>int a[4] = {0};</code>?", o:["{0}","{0, ?, ?, ?}","{0, 0, 0, 0}","{4, 0, 0, 0}"], a:2, e:"Las cajitas que no recibieron valor se llenan con 0, así que las 4 quedan en 0."},
-    {q:"¿Qué hace <code>v.push_back(6)</code> con un vector <code>v = {1, 2}</code>?", o:["Lo deja como {6, 1, 2}","Lo deja como {1, 2, 6}","Cambia <code>v[0]</code> por 6","Da error porque el vector está lleno"], a:1, e:"<code>push_back</code> agrega el valor al final y el vector crece: ahora tiene 3 elementos."},
-    {q:"¿Cuántos números pares hay en <code>{2, 7, 4, 1, 8}</code>?", o:["2","3","4","5"], a:1, e:"2, 4 y 8 dan resto 0 al dividirlos por 2. ¡Son 3 pares!"}
+    {q:"Si creamos <code>int dias[7];</code>, ¿cuál es el índice de la ÚLTIMA cajita?", o:["7","8","6","1"], a:2, e:"Hay 7 cajitas numeradas del 0 al 6. El último índice siempre es el tamaño menos 1."},
+    {q:"Con <code>int x[] = {4, 9, 1, 6};</code>, ¿qué muestra <code>cout &lt;&lt; x[3];</code>?", o:["6","1","9","Da error"], a:0, e:"Contamos desde 0: <code>x[0]</code> = 4, <code>x[1]</code> = 9, <code>x[2]</code> = 1 y <code>x[3]</code> = 6."},
+    {q:"Si <code>a = {1, 2, 3}</code>, ¿qué muestra <code>for (int i = 2; i &gt;= 0; i--) cout &lt;&lt; a[i];</code>?", o:["123","321","32","Nada"], a:1, e:"El ciclo parte en el último índice (2) y va bajando hasta 0, así que recorre el arreglo al revés: 3, 2, 1."},
+    {q:"Después de <code>for (int i = 0; i &lt; 4; i++) t[i] = i * 2;</code>, ¿qué contiene <code>t</code>?", o:["{2, 4, 6, 8}","{0, 1, 2, 3}","{1, 2, 3, 4}","{0, 2, 4, 6}"], a:3, e:"En cada vuelta la cajita <code>i</code> recibe <code>i * 2</code>: 0×2, 1×2, 2×2 y 3×2."},
+    {q:"<code>int p[3] = {5, 8, 2};</code> y luego <code>cout &lt;&lt; p[3];</code>. ¿Qué pasa?", o:["Muestra 2","Muestra 0","Se sale del arreglo","Muestra 3"], a:2, e:"Con 3 cajitas los índices válidos son 0, 1 y 2. <code>p[3]</code> está fuera del arreglo: puede mostrar basura o caerse."},
+    {q:"Para encontrar el número MÁS PEQUEÑO, partimos con <code>menor = a[0]</code>. ¿Qué condición va dentro del <code>for</code>?", o:["<code>if (a[i] &lt; menor)</code>","<code>if (a[i] &gt; menor)</code>","<code>if (a[i] == menor)</code>","<code>if (i &lt; menor)</code>"], a:0, e:"Solo cambiamos <code>menor</code> cuando aparece un valor todavía más chico: <code>a[i] &lt; menor</code>."},
+    {q:"<code>vector&lt;int&gt; v; v.push_back(4); v.push_back(9); v.pop_back();</code> ¿Cuánto vale <code>v.size()</code>?", o:["0","1","2","3"], a:1, e:"Se agregaron dos valores (4 y 9) y <code>pop_back</code> sacó el último. Queda solo el 4, así que el tamaño es 1."},
+    {q:"Al buscar un número en un arreglo, ¿para qué sirve el <code>break</code> cuando lo encontramos?", o:["Para borrar el número","Para volver a empezar el ciclo","Para saltarse solo esa cajita","Para dejar de buscar, porque ya lo encontramos"], a:3, e:"<code>break</code> termina el ciclo de inmediato. Si ya encontramos lo que buscábamos, no tiene sentido revisar las cajitas que quedan."}
   ];
   const card = $("#quizCard"); let qi = 0, score = 0, nombre = "", intento = 0; const res = [], picks = [];
   const URL_RESULTADOS = (window.NINAS_PRO_CONFIG && window.NINAS_PRO_CONFIG.urlResultados || "").trim();
